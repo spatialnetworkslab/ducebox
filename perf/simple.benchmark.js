@@ -1,5 +1,5 @@
 const { suite, benchmark } = require('@dynatrace/zakzak')
-const { pipe, rowOriented, mutate, filter, summarise, mean } = require('../src')
+const { pipe, rowOriented, mutate, filter, summarise, mean } = require('../dist/data-pipe.umd.js')
 
 // Data
 const fruits = ['apple', 'banana', 'coconut', 'durian']
@@ -14,7 +14,7 @@ function generateRandomFruitData (N) {
 }
 
 const fruitData1k = generateRandomFruitData(1000)
-// const fruitData10k = generateRandomFruitData(10000)
+const fruitData10k = generateRandomFruitData(10000)
 // const fruitData100k = generateRandomFruitData(100000)
 
 // Filter function
@@ -48,7 +48,7 @@ const arrayMethods = data => {
   let meanPriceEuros = data
     .filter(filterFunc)
     .map(row => ({ ...row, priceEuros: mutateFunc(row) }))
-    .reduce((acc, cur) => acc.priceEuros + cur.priceEuros)
+    .reduce((acc, cur) => acc + cur.priceEuros)
 
   meanPriceEuros = meanPriceEuros / data.length
 
@@ -56,34 +56,44 @@ const arrayMethods = data => {
 }
 
 // data-pipe implementation
-const dataPipe = data => pipe({
-  input: rowOriented,
-  output: rowOriented,
-  transformations: [
-    filter(filterFunc),
-    mutate('priceEuros', mutateFunc),
-    summarise({ meanPriceEuros: mean('priceEuros') })
-  ]
-})(data)[0].meanPriceEuros
+const dataPipe = data => {
+  const transform = pipe({
+    input: rowOriented,
+    output: rowOriented,
+    transformations: [
+      filter(filterFunc),
+      mutate('priceEuros', mutateFunc),
+      summarise({ meanPriceEuros: mean('priceEuros') })
+    ]
+  })
 
-suite('1k: filter -> mutate -> summarise', () => {
-  benchmark('imperative for-loop', () => {
+  return transform(data)[0].meanPriceEuros
+}
+
+suite('filter -> mutate -> summarise', () => {
+  // 1k
+  benchmark('1k: imperative for-loop', () => {
     forLoop(fruitData1k)
   })
 
-  benchmark('array methods', () => {
+  benchmark('1k: array methods', () => {
     arrayMethods(fruitData1k)
   })
 
-  benchmark('data-pipe', () => {
+  benchmark('1k: data-pipe', () => {
     dataPipe(fruitData1k)
   })
+
+  // 10k
+  benchmark('10k: imperative for-loop', () => {
+    forLoop(fruitData10k)
+  })
+
+  benchmark('10k: array methods', () => {
+    arrayMethods(fruitData10k)
+  })
+
+  benchmark('10k: data-pipe', () => {
+    dataPipe(fruitData10k)
+  })
 })
-
-// suite('10k: filter -> mutate -> summarise', () => {
-
-// })
-
-// suite('100k: filter -> mutate -> summarise', () => {
-
-// })

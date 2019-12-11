@@ -1,4 +1,7 @@
 {
+  "main": "dist/data-pipe.cjs.js",
+  "module": "dist/data-pipe.esm.js",
+  "browser": "dist/data-pipe.umd.js",
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
