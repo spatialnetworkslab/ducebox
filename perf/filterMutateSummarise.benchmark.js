@@ -1,5 +1,6 @@
 const { suite, benchmark } = require('@dynatrace/zakzak')
 const { pipe, rowOriented, mutate, filter, summarise, mean } = require('../dist/data-pipe.umd.js')
+const R = require('ramda')
 
 // Data
 const fruits = ['apple', 'banana', 'coconut', 'durian']
@@ -15,7 +16,6 @@ function generateRandomFruitData (N) {
 
 const fruitData1k = generateRandomFruitData(1000)
 const fruitData10k = generateRandomFruitData(10000)
-// const fruitData100k = generateRandomFruitData(100000)
 
 // Filter function
 const filterFunc = row => ['apple', 'coconut'].includes(row.fruit)
@@ -55,6 +55,13 @@ const arrayMethods = data => {
   return meanPriceEuros
 }
 
+// Ramda implementation
+const ramda = R.pipe(
+  R.filter(filterFunc),
+  R.map(row => ({ ...row, priceEuros: mutateFunc(row) })),
+  R.reduce((acc, cur) => acc + cur.priceEuros)
+)
+
 // data-pipe implementation
 const dataPipe = data => {
   const transform = pipe({
@@ -80,6 +87,10 @@ suite('filter -> mutate -> summarise', () => {
     arrayMethods(fruitData1k)
   })
 
+  benchmark('1k: ramda', () => {
+    ramda(fruitData1k)
+  })
+
   benchmark('1k: data-pipe', () => {
     dataPipe(fruitData1k)
   })
@@ -91,6 +102,10 @@ suite('filter -> mutate -> summarise', () => {
 
   benchmark('10k: array methods', () => {
     arrayMethods(fruitData10k)
+  })
+
+  benchmark('10k: ramda', () => {
+    ramda(fruitData10k)
   })
 
   benchmark('10k: data-pipe', () => {
