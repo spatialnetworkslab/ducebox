@@ -2,6 +2,7 @@ const { suite, benchmark } = require('@dynatrace/zakzak')
 const { pipe, rowOriented, mutate, filter, summarise, mean } = require('../dist/data-pipe.umd.js')
 const R = require('ramda')
 const { DataFrame } = require('dataframe-js')
+const Lazy = require('lazy.js')
 
 // Data
 const fruits = ['apple', 'banana', 'coconut', 'durian']
@@ -46,12 +47,12 @@ const forLoop = data => {
 
 // Native array methods (filter -> map -> reduce) implementation
 const arrayMethods = data => {
-  let meanPriceEuros = data
+  const totalPriceEuros = data
     .filter(filterFunc)
     .map(row => ({ ...row, priceEuros: mutateFunc(row) }))
     .reduce((acc, cur) => acc + cur.priceEuros)
 
-  meanPriceEuros = meanPriceEuros / data.length
+  const meanPriceEuros = totalPriceEuros / data.length
 
   return meanPriceEuros
 }
@@ -77,6 +78,14 @@ const dataFrame = data => {
     .filter(filterFunc)
     .map(row => row.set('priceEuros', row.get('pricePounds') * POUND_TO_EURO_EXCHANGE_RATE))
     .stat.mean('priceEuros')
+}
+
+// Lazy.js implementation
+const lazy = data => {
+  const totalPriceEuros = Lazy(data)
+    .filter(filterFunc)
+    .map(row => ({ ...row, priceEuros: mutateFunc(row) }))
+    .reduce()
 }
 
 // data-pipe implementation
