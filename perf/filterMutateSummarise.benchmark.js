@@ -1,6 +1,7 @@
 const { suite, benchmark } = require('@dynatrace/zakzak')
 const { pipe, rowOriented, mutate, filter, summarise, mean } = require('../dist/data-pipe.umd.js')
 const R = require('ramda')
+const { DataFrame } = require('dataframe-js')
 
 // Data
 const fruits = ['apple', 'banana', 'coconut', 'durian']
@@ -56,11 +57,27 @@ const arrayMethods = data => {
 }
 
 // Ramda implementation
-const ramda = R.pipe(
-  R.filter(filterFunc),
-  R.map(row => ({ ...row, priceEuros: mutateFunc(row) })),
-  R.reduce((acc, cur) => acc + cur.priceEuros)
-)
+const ramda = data => {
+  const transformation = R.pipe(
+    R.filter(filterFunc),
+    R.map(row => ({ ...row, priceEuros: mutateFunc(row) })),
+    R.reduce((acc, cur) => acc + cur.priceEuros)
+  )
+
+  const meanPriceEuros = transformation(data) / data.length
+
+  return meanPriceEuros
+}
+
+// dataframe-js implementation
+const dataFrame = data => {
+  const df = new DataFrame(data, Object.keys(data[0]))
+
+  return df
+    .filter(filterFunc)
+    .map(row => row.set('priceEuros', row.get('pricePounds') * POUND_TO_EURO_EXCHANGE_RATE))
+    .stat.mean('priceEuros')
+}
 
 // data-pipe implementation
 const dataPipe = data => {
@@ -91,6 +108,10 @@ suite('filter -> mutate -> summarise', () => {
     ramda(fruitData1k)
   })
 
+  benchmark('1k: dataframe-js', () => {
+    dataFrame(fruitData1k)
+  })
+
   benchmark('1k: data-pipe', () => {
     dataPipe(fruitData1k)
   })
@@ -106,6 +127,10 @@ suite('filter -> mutate -> summarise', () => {
 
   benchmark('10k: ramda', () => {
     ramda(fruitData10k)
+  })
+
+  benchmark('10k: dataframe-js', () => {
+    dataFrame(fruitData10k)
   })
 
   benchmark('10k: data-pipe', () => {
