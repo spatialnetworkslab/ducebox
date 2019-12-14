@@ -21,7 +21,7 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
-    "perf": "./node_modules/@dynatrace/zakzak/dist/src/cli-script.js"
+    "perf": "yarn build && ./node_modules/@dynatrace/zakzak/dist/src/cli-script.js"
   },
   "files": [
     "dist"

@@ -17,9 +17,9 @@ export default class Structure {
   }
 
   _getGroupedValues (row) {
-    const groupedValues = []
+    if (this._groupedColumnNames === undefined) return
 
-    if (this._groupedColumnNames === undefined) return groupedValues
+    const groupedValues = []
 
     for (const columnName of this._groupedColumnNames) {
       groupedValues.push(row[columnName])
@@ -29,10 +29,26 @@ export default class Structure {
   }
 
   _getGroupId (groupedValues) {
-    return JSON.stringify(groupedValues)
+    if (!groupedValues) return '_'
+
+    let groupId = ''
+
+    for (let i = 0; i < groupedValues.length; i++) {
+      const groupedValue = groupedValues[i]
+
+      if (groupedValue.constructor === String) {
+        groupId += (groupedValue + ',')
+      } else {
+        groupId += (groupedValues[i].toString() + ',')
+      }
+    }
+
+    return groupId
   }
 
   _createGroupedValueObject (groupedValues) {
+    if (!groupedValues) return {}
+
     const groupedValueObject = {}
 
     for (let i = 0; i < groupedValues.length; i++) {
