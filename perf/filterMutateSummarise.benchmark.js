@@ -1,5 +1,5 @@
 const { suite, benchmark } = require('@dynatrace/zakzak')
-const { pipe, rowOriented, mutate, filter, summarise, mean } = require('../dist/data-pipe.umd.js')
+const { pipe, rowOriented, mutate, filter, summarise, sum } = require('../dist/data-pipe.umd.js')
 const R = require('ramda')
 const { DataFrame } = require('dataframe-js')
 const Lazy = require('lazy.js')
@@ -29,20 +29,18 @@ const mutateFunc = row => row.pricePounds * POUND_TO_EURO_EXCHANGE_RATE
 // Imperative for-loop implementation
 const forLoop = data => {
   const dataLength = data.length
-  let meanPriceEuros = 0
+  let totalPriceEuros = 0
 
   for (let i = 0; i < dataLength; i++) {
     const row = data[i]
 
     if (filterFunc(row)) {
       const priceEuros = mutateFunc(row)
-      meanPriceEuros += priceEuros
+      totalPriceEuros += priceEuros
     }
   }
 
-  meanPriceEuros = meanPriceEuros / dataLength
-
-  return meanPriceEuros
+  return totalPriceEuros
 }
 
 // Native array methods (filter -> map -> reduce) implementation
@@ -52,9 +50,7 @@ const arrayMethods = data => {
     .map(row => ({ ...row, priceEuros: mutateFunc(row) }))
     .reduce((acc, cur) => acc + cur.priceEuros)
 
-  const meanPriceEuros = totalPriceEuros / data.length
-
-  return meanPriceEuros
+  return totalPriceEuros
 }
 
 // Ramda implementation
@@ -65,9 +61,7 @@ const ramda = data => {
     R.reduce((acc, cur) => acc + cur.priceEuros)
   )
 
-  const meanPriceEuros = transformation(data) / data.length
-
-  return meanPriceEuros
+  return transformation(data)
 }
 
 // dataframe-js implementation
@@ -77,7 +71,7 @@ const dataFrame = data => {
   return df
     .filter(filterFunc)
     .map(row => row.set('priceEuros', row.get('pricePounds') * POUND_TO_EURO_EXCHANGE_RATE))
-    .stat.mean('priceEuros')
+    .stat.sum('priceEuros')
 }
 
 // Lazy.js implementation
@@ -85,7 +79,9 @@ const lazy = data => {
   const totalPriceEuros = Lazy(data)
     .filter(filterFunc)
     .map(row => ({ ...row, priceEuros: mutateFunc(row) }))
-    .reduce()
+    .reduce((acc, cur) => acc + cur.priceEuros)
+
+  return totalPriceEuros
 }
 
 // data-pipe implementation
@@ -96,7 +92,7 @@ const dataPipe = data => {
     transformations: [
       filter(filterFunc),
       mutate('priceEuros', mutateFunc),
-      summarise({ meanPriceEuros: mean('priceEuros') })
+      summarise({ meanPriceEuros: sum('priceEuros') })
     ]
   })
 
@@ -121,6 +117,10 @@ suite('filter -> mutate -> summarise', () => {
     dataFrame(fruitData1k)
   })
 
+  benchmark('1k: Lazy.js', () => {
+    lazy(fruitData1k)
+  })
+
   benchmark('1k: data-pipe', () => {
     dataPipe(fruitData1k)
   })
@@ -140,6 +140,10 @@ suite('filter -> mutate -> summarise', () => {
 
   benchmark('10k: dataframe-js', () => {
     dataFrame(fruitData10k)
+  })
+
+  benchmark('10k: Lazy.js', () => {
+    lazy(fruitData10k)
   })
 
   benchmark('10k: data-pipe', () => {
