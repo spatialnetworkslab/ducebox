@@ -45,14 +45,10 @@ export default function processTransformationsCycle (data, input, output, transf
           skipRow = true
           break
         }
-      }
-
-      if (transformation.type === 'mutate') {
+      } else if (transformation.type === 'mutate') {
         const { newColumnName, calculationFunc } = transformation
         row[newColumnName] = calculationFunc(row)
-      }
-
-      if (transformation.type === 'select') {
+      } else if (transformation.type === 'select') {
         for (const columnName in row) {
           if (!transformation.columnNames.has(columnName)) {
             delete row[columnName]

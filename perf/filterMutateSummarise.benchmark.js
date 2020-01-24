@@ -1,5 +1,5 @@
 const { suite, benchmark } = require('@dynatrace/zakzak')
-const { pipe, rowOriented, mutate, filter, summarise, sum } = require('../dist/data-pipe.umd.js')
+const { pipe, rowOriented, mutate, filter, summarise, sum } = require('../dist/data-pipe.cjs.js')
 const R = require('ramda')
 const { DataFrame } = require('dataframe-js')
 const Lazy = require('lazy.js')
