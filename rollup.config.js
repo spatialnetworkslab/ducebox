@@ -7,7 +7,7 @@ export default [
   {
     input: 'src/index.js',
     output: {
-      name: 'ramda-columns',
+      name: 'data-pipe',
       file: pkg.browser,
       format: 'umd'
     },

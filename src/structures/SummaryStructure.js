@@ -68,7 +68,7 @@ export default class SummaryStructure extends Structure {
   }
 
   _applyAfterReduceUngrouped (dataLength) {
-    const groupId = '[]'
+    const groupId = '_'
     const group = this._groups[groupId]
 
     group.summaryData = this._applyAfterReduce(group.summaryData, dataLength)
