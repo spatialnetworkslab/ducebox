@@ -1,10 +1,10 @@
 export function rename (data, renameInstructions) {
   const newData = Object.assign({}, data)
 
-  for (const newName in renameInstructions) {
-    const oldName = renameInstructions[newName]
-    newData[newName] = newData[oldName]
-    delete newData[oldName]
+  for (const newColumnName in renameInstructions) {
+    const oldColumnName = renameInstructions[newColumnName]
+    newData[newColumnName] = newData[oldColumnName]
+    delete newData[oldColumnName]
   }
 
   return newData
