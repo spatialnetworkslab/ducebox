@@ -1,13 +1,27 @@
-import { forEachEntry } from '../utils/forEach.js'
+import { arrange as _arrange } from './arrange.js'
+import { filter as _filter } from './filter.js'
+import { mutate as _mutate, transmute as _transmute } from './mutate.js'
+import { rename as _rename } from './rename.js'
+import { select as _select } from './select.js'
+import { slice as _slice } from './slice.js'
 
-import { arrange } from './arrange.js'
-import { filter } from './filter.js'
-import { mutate, transmute } from './mutate.js'
-import { rename } from './rename.js'
-import { select } from './select.js'
-import { slice } from './slice.js'
+function curryTransformation (transformation) {
+  return function (...args) {
+    return function (data) {
+      return transformation(data, ...args)
+    }
+  }
+}
 
-const originalTransformations = {
+const arrange = curryTransformation(_arrange)
+const filter = curryTransformation(_filter)
+const mutate = curryTransformation(_mutate)
+const rename = curryTransformation(_rename)
+const select = curryTransformation(_select)
+const slice = curryTransformation(_slice)
+const transmute = curryTransformation(_transmute)
+
+export {
   arrange,
   filter,
   mutate,
@@ -16,18 +30,3 @@ const originalTransformations = {
   slice,
   transmute
 }
-
-export function curryTransformation (transformation) {
-  return function (...args) {
-    return function (data) {
-      return transformation(data, ...args)
-    }
-  }
-}
-
-const transformations = forEachEntry(
-  originalTransformations,
-  curryTransformation
-)
-
-export { transformations }

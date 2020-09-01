@@ -1,22 +1,10 @@
-import { forEachEntry } from '../utils/forEach.js'
-
-import { count } from './count.js'
-import { max } from './max.js'
-import { mean } from './mean.js'
-import { median } from './median.js'
-import { min } from './min.js'
-import { mode } from './mode.js'
-import { sum } from './sum.js'
-
-const originalReducers = {
-  count,
-  max,
-  mean,
-  median,
-  min,
-  mode,
-  sum
-}
+import { count as _count } from './count.js'
+import { max as _max } from './max.js'
+import { mean as _mean } from './mean.js'
+import { median as _median } from './median.js'
+import { min as _min } from './min.js'
+import { mode as _mode } from './mode.js'
+import { sum as _sum } from './sum.js'
 
 function enableColumnNameSyntax (fn) {
   // These reducers all only take 1 argument, so we only need to check the first
@@ -31,9 +19,20 @@ function enableColumnNameSyntax (fn) {
   }
 }
 
-const reducers = forEachEntry(
-  originalReducers,
-  enableColumnNameSyntax
-)
+const count = enableColumnNameSyntax(_count)
+const max = enableColumnNameSyntax(_max)
+const mean = enableColumnNameSyntax(_mean)
+const median = enableColumnNameSyntax(_median)
+const min = enableColumnNameSyntax(_min)
+const mode = enableColumnNameSyntax(_mode)
+const sum = enableColumnNameSyntax(_sum)
 
-export { reducers }
+export {
+  count,
+  max,
+  mean,
+  median,
+  min,
+  mode,
+  sum
+}

@@ -1,26 +1,18 @@
 import { CURRIED_COMPARE_FN } from '../symbols.js'
-import { forEachEntry } from '../utils/forEach.js'
 
 // https://beta.observablehq.com/@mbostock/manipulating-flat-arrays
 // Also works for dates
-const ascending = (a, b) => a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN
-const descending = (a, b) => b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN
+const _ascending = (a, b) => a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN
+const _descending = (a, b) => b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN
 
-const ascendingStr = (a, b) => {
+const _ascendingStr = (a, b) => {
   const sorted = [a, b].sort()
   return sorted[0] === a ? -1 : 1
 }
 
-const descendingStr = (a, b) => {
+const _descendingStr = (a, b) => {
   const sorted = [a, b].sort()
   return sorted[0] === a ? 1 : -1
-}
-
-const originalCompareFunctions = {
-  ascending,
-  descending,
-  ascendingStr,
-  descendingStr
 }
 
 function enableColumnNameSyntax (fn) {
@@ -47,9 +39,14 @@ function enableColumnNameSyntax (fn) {
   return curriedFn
 }
 
-const compareFunctions = forEachEntry(
-  originalCompareFunctions,
-  enableColumnNameSyntax
-)
+const ascending = enableColumnNameSyntax(_ascending)
+const descending = enableColumnNameSyntax(_descending)
+const ascendingStr = enableColumnNameSyntax(_ascendingStr)
+const descendingStr = enableColumnNameSyntax(_descendingStr)
 
-export { compareFunctions }
+export {
+  ascending,
+  descending,
+  ascendingStr,
+  descendingStr
+}
