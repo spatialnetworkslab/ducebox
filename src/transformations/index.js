@@ -1,5 +1,4 @@
 import { forEachEntry } from '../utils/forEach.js'
-import { curryTransformation } from '../utils/curry.js'
 
 import { filter } from './filter.js'
 import { mutate, transmute } from './mutate.js'
@@ -14,6 +13,14 @@ const originalTransformations = {
   select,
   slice,
   transmute
+}
+
+export function curryTransformation (transformation) {
+  return function (...args) {
+    return function (data) {
+      return transformation(data, ...args)
+    }
+  }
 }
 
 const transformations = forEachEntry(

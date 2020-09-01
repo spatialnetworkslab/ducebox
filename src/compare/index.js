@@ -1,5 +1,4 @@
 import { forEachEntry } from '../utils/forEach.js'
-import { enableColumnNameSyntax } from '../utils/curry.js'
 
 // https://beta.observablehq.com/@mbostock/manipulating-flat-arrays
 // Also works for dates
@@ -21,6 +20,26 @@ const originalCompareFunctions = {
   descending,
   ascendingStr,
   descendingStr
+}
+
+function enableColumnNameSyntax (fn) {
+  /*
+   * This currying layer slows down the compare function if the user wants
+   * to use the function directly, like `array.sort(ascending)`, because
+   * of the argument length check. However, the layer can be peeled off by using
+   * `array.sort(ascending())`, which will yield the normal uncurried function.
+   * Not ideal syntax-wise, but seems for now the most reasonable solution.
+   * In any case, this should be documented.
+   */
+  return function (...args) {
+    if (args.length === 2) return fn(...args)
+
+    if (args.length === 0) return fn
+
+    if (args.length === 1) {
+      return { [args[0]]: fn }
+    }
+  }
 }
 
 const compareFunctions = forEachEntry(

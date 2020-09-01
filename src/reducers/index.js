@@ -1,5 +1,4 @@
 import { forEachEntry } from '../utils/forEach.js'
-import { enableColumnNameSyntax } from '../utils/curry.js'
 
 import { count } from './count.js'
 import { max } from './max.js'
@@ -17,6 +16,19 @@ const originalReducers = {
   min,
   mode,
   sum
+}
+
+function enableColumnNameSyntax (fn) {
+  // These reducers all only take 1 argument, so we only need to check the first
+  return function (arg) {
+    if (arg.constructor === String) {
+      return { [arg]: fn }
+    }
+
+    if (arg.constrctor === Array) {
+      return fn(arg)
+    }
+  }
 }
 
 const reducers = forEachEntry(
