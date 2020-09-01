@@ -1,3 +1,4 @@
+import { CURRIED_COMPARE_FN } from '../symbols.js'
 import { forEachEntry } from '../utils/forEach.js'
 
 // https://beta.observablehq.com/@mbostock/manipulating-flat-arrays
@@ -25,13 +26,13 @@ const originalCompareFunctions = {
 function enableColumnNameSyntax (fn) {
   /*
    * This currying layer slows down the compare function if the user wants
-   * to use the function directly, like `array.sort(ascending)`, because
-   * of the argument length check. However, the layer can be peeled off by using
-   * `array.sort(ascending())`, which will yield the normal uncurried function.
-   * Not ideal syntax-wise, but seems for now the most reasonable solution.
+   * to use the function directly outside of the library, like
+   * `array.sort(ascending)`, because of the argument length check. However,
+   * the layer can be peeled off by using `array.sort(ascending())`, which will
+   * yield the normal, uncurried function. Not ideal syntax-wise, but seems for now the most reasonable solution.
    * In any case, this should be documented.
    */
-  return function (...args) {
+  const curriedFn = function (...args) {
     if (args.length === 2) return fn(...args)
 
     if (args.length === 0) return fn
@@ -40,6 +41,10 @@ function enableColumnNameSyntax (fn) {
       return { [args[0]]: fn }
     }
   }
+
+  curriedFn[CURRIED_COMPARE_FN] = true
+
+  return curriedFn
 }
 
 const compareFunctions = forEachEntry(

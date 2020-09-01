@@ -1,3 +1,4 @@
+import { CURRIED_COMPARE_FN } from '../symbols.js'
 import { slice } from './slice.js'
 
 export function arrange (data, ...arrangeInstructions) {
@@ -17,7 +18,7 @@ export function arrange (data, ...arrangeInstructions) {
 
 function arrangeSingleInstruction (data, arrangeInstruction) {
   const columnName = Object.keys(arrangeInstruction)[0]
-  const compareFunction = arrangeInstruction[columnName]
+  const compareFunction = getCompareFunction(arrangeInstruction[columnName])
 
   const array = data[columnName]
 
@@ -25,4 +26,10 @@ function arrangeSingleInstruction (data, arrangeInstruction) {
   const arrangedIndices = indices.sort((a, b) => compareFunction(array[a], array[b]))
 
   return slice(data, arrangedIndices)
+}
+
+function getCompareFunction (fn) {
+  if (fn[CURRIED_COMPARE_FN]) return fn()
+
+  return fn
 }
