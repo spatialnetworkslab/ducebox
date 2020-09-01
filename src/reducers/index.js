@@ -1,3 +1,6 @@
+import { forEachEntry } from '../utils/forEach.js'
+import { enableColumnNameSyntax } from '../utils/curry.js'
+
 import { count } from './count.js'
 import { max } from './max.js'
 import { mean } from './mean.js'
@@ -6,7 +9,7 @@ import { min } from './min.js'
 import { mode } from './mode.js'
 import { sum } from './sum.js'
 
-export {
+const originalReducers = {
   count,
   max,
   mean,
@@ -15,3 +18,10 @@ export {
   mode,
   sum
 }
+
+const reducers = forEachEntry(
+  originalReducers,
+  enableColumnNameSyntax
+)
+
+export { reducers }
