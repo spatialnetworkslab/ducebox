@@ -4,6 +4,9 @@ export function mutate (data, ...mutateInstructions) {
   const length = getDataLength(data)
   const newData = initNewData(data, mutateInstructions)
 
+  const mutateColumns = getMutateColumns(mutateInstructions)
+  const mutateFunctions = getMutateFunctions(mutateInstructions)
+
   for (let i = 0; i < length; i++) {
     const row = {}
 
@@ -11,8 +14,10 @@ export function mutate (data, ...mutateInstructions) {
       row[columnName] = data[columnName][i]
     }
 
-    for (const mutateInstruction of mutateInstructions) {
-      const { key: columnName, value: mutateFunction } = getKeyValuePair(mutateInstruction)
+    for (let i = 0; i < mutateColumns.length; i++) {
+      const columnName = mutateColumns[i]
+      const mutateFunction = mutateFunctions[i]
+
       newData[columnName][i] = mutateFunction(row, i)
     }
   }
@@ -22,7 +27,7 @@ export function mutate (data, ...mutateInstructions) {
 
 export function transmute (data, ...transmuteInstructions) {
   const newData = mutate(data, ...transmuteInstructions)
-  const mutateColumns = getMutateColumns(transmuteInstructions)
+  const mutateColumns = new Set(getMutateColumns(transmuteInstructions))
 
   for (const columnName in newData) {
     if (!(mutateColumns.has(columnName))) {
@@ -38,7 +43,7 @@ function initNewData (data, mutateInstructions) {
   const newData = Object.assign({}, data)
 
   const dataColumns = new Set(Object.keys(data))
-  const mutateColumns = getMutateColumns(mutateInstructions)
+  const mutateColumns = new Set(getMutateColumns(mutateInstructions))
 
   for (const columnName of mutateColumns) {
     if (!dataColumns.has(columnName)) {
@@ -50,8 +55,15 @@ function initNewData (data, mutateInstructions) {
 }
 
 function getMutateColumns (mutateInstructions) {
-  return new Set(mutateInstructions.map(instruction => {
+  return mutateInstructions.map(instruction => {
     const { key: column } = getKeyValuePair(instruction)
     return column
-  }))
+  })
+}
+
+function getMutateFunctions (mutateInstructions) {
+  return mutateInstructions.map(instruction => {
+    const { value: fn } = getKeyValuePair(instruction)
+    return fn
+  })
 }
