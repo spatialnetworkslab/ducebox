@@ -43,7 +43,7 @@ function initNewData (data, mutateInstructions) {
   const newData = Object.assign({}, data)
 
   const dataColumns = new Set(Object.keys(data))
-  const mutateColumns = new Set(getMutateColumns(mutateInstructions))
+  const mutateColumns = getMutateColumns(mutateInstructions)
 
   for (const columnName of mutateColumns) {
     if (!dataColumns.has(columnName)) {
