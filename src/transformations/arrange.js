@@ -1,5 +1,6 @@
 import { CURRIED_COMPARE_FN } from '../symbols.js'
 import { slice } from './slice.js'
+import { getKeyValuePair } from '../utils'
 
 export function arrange (data, ...arrangeInstructions) {
   let newData
@@ -17,7 +18,7 @@ export function arrange (data, ...arrangeInstructions) {
 }
 
 function arrangeSingleInstruction (data, arrangeInstruction) {
-  const columnName = Object.keys(arrangeInstruction)[0]
+  const { key: columnName } = getKeyValuePair(arrangeInstruction)
   const compareFunction = getCompareFunction(arrangeInstruction[columnName])
 
   const array = data[columnName]

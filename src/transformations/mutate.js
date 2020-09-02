@@ -1,6 +1,6 @@
-import { getDataLength } from '../utils/getDataLength.js'
+import { getDataLength, getKeyValuePair } from '../utils'
 
-export function mutate (data, mutateInstructions) {
+export function mutate (data, ...mutateInstructions) {
   const length = getDataLength(data)
   const newData = initNewData(data, mutateInstructions)
 
@@ -11,8 +11,8 @@ export function mutate (data, mutateInstructions) {
       row[columnName] = data[columnName][i]
     }
 
-    for (const columnName in mutateInstructions) {
-      const mutateFunction = mutateInstructions[columnName]
+    for (const mutateInstruction of mutateInstructions) {
+      const { key: columnName, value: mutateFunction } = getKeyValuePair(mutateInstruction)
       newData[columnName][i] = mutateFunction(row, i)
     }
   }
@@ -20,11 +20,12 @@ export function mutate (data, mutateInstructions) {
   return newData
 }
 
-export function transmute (data, transmuteInstructions) {
-  const newData = mutate(data, transmuteInstructions)
+export function transmute (data, ...transmuteInstructions) {
+  const newData = mutate(data, ...transmuteInstructions)
+  const mutateColumns = getMutateColumns(transmuteInstructions)
 
   for (const columnName in newData) {
-    if (!(columnName in transmuteInstructions)) {
+    if (!(mutateColumns.has(columnName))) {
       delete newData[columnName]
     }
   }
@@ -37,7 +38,7 @@ function initNewData (data, mutateInstructions) {
   const newData = Object.assign({}, data)
 
   const dataColumns = new Set(Object.keys(data))
-  const mutateColumns = new Set(Object.keys(mutateInstructions))
+  const mutateColumns = getMutateColumns(mutateInstructions)
 
   for (const columnName of mutateColumns) {
     if (!dataColumns.has(columnName)) {
@@ -46,4 +47,11 @@ function initNewData (data, mutateInstructions) {
   }
 
   return newData
+}
+
+function getMutateColumns (mutateInstructions) {
+  return new Set(mutateInstructions.map(instruction => {
+    const { key: column } = getKeyValuePair(instruction)
+    return column
+  }))
 }

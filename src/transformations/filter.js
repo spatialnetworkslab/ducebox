@@ -1,4 +1,4 @@
-import { getDataLength } from '../utils/getDataLength.js'
+import { getDataLength } from '../utils'
 
 export function filter (data, condition) {
   const dataLength = getDataLength(data)

@@ -1,4 +1,4 @@
-import { getIndices } from '../utils/getIndices.js'
+import { getIndices } from '../utils'
 
 export function slice (data, indices) {
   const newData = {}
