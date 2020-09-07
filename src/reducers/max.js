@@ -1,5 +1,15 @@
 export function max (array) {
-  if (array.length === 0) return null
-
   return Math.max(...array)
+}
+
+export const foldableMax = {
+  startValue: -Infinity,
+  reduce (currentValue, previousValue) {
+    return currentValue > previousValue
+      ? currentValue
+      : previousValue
+  },
+  finally (value, length) {
+    return value
+  }
 }

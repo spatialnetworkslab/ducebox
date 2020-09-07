@@ -3,7 +3,6 @@
 export function median (array) {
   const len = array.length
 
-  if (len === 0) return null
   if (len === 1) return array[0]
 
   if (len % 2 === 1) {

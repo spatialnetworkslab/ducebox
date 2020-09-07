@@ -1,6 +1,4 @@
 export function mode (array) {
-  if (array.length === 0) return null
-
   const occurrences = getOccurrences(array)
   return findElementWithMostOccurrences(occurrences)
 }
