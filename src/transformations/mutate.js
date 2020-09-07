@@ -18,7 +18,7 @@ export function mutate (data, ...mutateInstructions) {
       const columnName = mutateColumnNames[i]
       const mutateFunction = mutateFunctions[i]
 
-      newData[columnName][i] = mutateFunction(row, i)
+      newData[columnName].push(mutateFunction(row, i))
     }
   }
 
@@ -39,7 +39,6 @@ export function transmute (data, ...transmuteInstructions) {
 }
 
 function initNewData (data, mutateInstructions) {
-  const length = getDataLength(data)
   const newData = Object.assign({}, data)
 
   const dataColumnNames = new Set(Object.keys(data))
@@ -47,7 +46,7 @@ function initNewData (data, mutateInstructions) {
 
   for (const columnName of mutateColumnNames) {
     if (!dataColumnNames.has(columnName)) {
-      newData[columnName] = new Array(length).fill(undefined)
+      newData[columnName] = []
     }
   }
 
