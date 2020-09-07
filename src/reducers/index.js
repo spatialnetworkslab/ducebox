@@ -1,10 +1,12 @@
-import { count as _count } from './count.js'
-import { max as _max } from './max.js'
-import { mean as _mean } from './mean.js'
-import { median as _median } from './median.js'
-import { min as _min } from './min.js'
-import { mode as _mode } from './mode.js'
-import { sum as _sum } from './sum.js'
+import { count, foldableCount } from './count.js'
+import { max, foldableMax } from './max.js'
+import { mean, foldableMean } from './mean.js'
+import { median } from './median.js'
+import { min, foldableMin } from './min.js'
+import { mode, foldableMode } from './mode.js'
+import { sum, foldableSum } from './sum.js'
+
+import { FOLDABLE_REDUCER } from '../symbols.js'
 
 function enableColumnNameSyntax (fn) {
   // These reducers all only take 1 argument, so we only need to check the first
@@ -19,13 +21,25 @@ function enableColumnNameSyntax (fn) {
   }
 }
 
-const count = enableColumnNameSyntax(_count)
-const max = enableColumnNameSyntax(_max)
-const mean = enableColumnNameSyntax(_mean)
-const median = enableColumnNameSyntax(_median)
-const min = enableColumnNameSyntax(_min)
-const mode = enableColumnNameSyntax(_mode)
-const sum = enableColumnNameSyntax(_sum)
+count = enableColumnNameSyntax(count)
+max = enableColumnNameSyntax(max)
+mean = enableColumnNameSyntax(mean)
+median = enableColumnNameSyntax(median)
+min = enableColumnNameSyntax(min)
+mode = enableColumnNameSyntax(mode)
+sum = enableColumnNameSyntax(sum)
+
+function attachFoldableVersion (transformation, foldableVersion) {
+  transformation[FOLDABLE_REDUCER] = foldableVersion
+  return transformation
+}
+
+count = attachFoldableVersion(count, foldableCount)
+max = attachFoldableVersion(max, foldableMax)
+mean = attachFoldableVersion(mean, foldableMean)
+min = attachFoldableVersion(min, foldableMin)
+mode = attachFoldableVersion(mode, foldableMode)
+sum = attachFoldableVersion(sum, foldableSum)
 
 export {
   count,
