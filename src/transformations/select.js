@@ -1,7 +1,7 @@
-export function select (data, ...selection) {
+export function select (data, ...selectionColumnNames) {
   const newData = {}
 
-  for (const columnName of selection) {
+  for (const columnName of selectionColumnNames) {
     newData[columnName] = data[columnName]
   }
 
