@@ -20,7 +20,7 @@ export function filter (data, condition) {
   return newData
 }
 
-function initNewData (data) {
+export function initNewData (data) {
   const newData = {}
 
   for (const columnName in data) {
