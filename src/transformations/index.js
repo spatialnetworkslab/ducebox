@@ -1,6 +1,8 @@
 import { arrange } from './arrange.js'
 import { filter } from './filter.js'
+import { filterBy } from './filterBy.js'
 import { mutate, transmute } from './mutate.js'
+import { nest } from './nest.js'
 import { pivotLonger } from './pivotLonger.js'
 import { pivotWider } from './pivotWider.js'
 import { rename } from './rename.js'
@@ -19,7 +21,9 @@ function curryTransformation (transformation) {
 
 arrange = curryTransformation(arrange)
 filter = curryTransformation(filter)
+filterBy = curryTransformation(filterBy)
 mutate = curryTransformation(mutate)
+nest = curryTransformation(nest)
 pivotLonger = curryTransformation(pivotLonger)
 pivotWider = curryTransformation(pivotWider)
 rename = curryTransformation(rename)
@@ -32,7 +36,9 @@ transmute = curryTransformation(transmute)
 export {
   arrange,
   filter,
+  filterBy,
   mutate,
+  nest,
   pivotLonger,
   pivotWider,
   rename,
