@@ -4,7 +4,7 @@ export function max (array) {
 
 export const foldableMax = {
   startValue: -Infinity,
-  reduce (currentValue, previousValue) {
+  fold (currentValue, previousValue) {
     return currentValue > previousValue
       ? currentValue
       : previousValue

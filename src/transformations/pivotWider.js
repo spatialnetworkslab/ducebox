@@ -1,4 +1,4 @@
-import { getDataLength } from '../utils'
+import { getDataLength, getId } from '../utils'
 
 export function pivotWider (
   data,
@@ -64,17 +64,4 @@ function initNewData (idColumnNames, namesFromColumn, length, valuesFill) {
   }
 
   return newData
-}
-
-function getId (data, rowNumber, idColumnNames) {
-  let id = ''
-
-  for (let i = 0; i < idColumnNames.length; i++) {
-    const columnName = idColumnNames[i]
-
-    id += '$'
-    id += data[columnName][i].toString()
-  }
-
-  return id
 }

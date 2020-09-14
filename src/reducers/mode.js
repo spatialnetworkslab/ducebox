@@ -37,7 +37,7 @@ function findElementWithMostOccurrences (occurrences) {
 
 export const foldableMode = {
   startValue: {},
-  reduce (currentValue, previousValue) {
+  fold (currentValue, previousValue) {
     if (currentValue in previousValue) {
       previousValue[currentValue]++
     } else {

@@ -1,11 +1,13 @@
-import { arrange as _arrange } from './arrange.js'
-import { filter as _filter } from './filter.js'
-import { mutate as _mutate, transmute as _transmute } from './mutate.js'
-import { pivotLonger as _pivotLonger } from './pivotLonger.js'
-import { pivotWider as _pivotWider } from './pivotWider.js'
-import { rename as _rename } from './rename.js'
-import { select as _select } from './select.js'
-import { slice as _slice } from './slice.js'
+import { arrange } from './arrange.js'
+import { filter } from './filter.js'
+import { mutate, transmute } from './mutate.js'
+import { pivotLonger } from './pivotLonger.js'
+import { pivotWider } from './pivotWider.js'
+import { rename } from './rename.js'
+import { select } from './select.js'
+import { slice } from './slice.js'
+import { summarise } from './summarise.js'
+import { summariseBy } from './summariseBy.js'
 
 function curryTransformation (transformation) {
   return function (...args) {
@@ -15,15 +17,17 @@ function curryTransformation (transformation) {
   }
 }
 
-const arrange = curryTransformation(_arrange)
-const filter = curryTransformation(_filter)
-const mutate = curryTransformation(_mutate)
-const pivotLonger = curryTransformation(_pivotLonger)
-const pivotWider = curryTransformation(_pivotWider)
-const rename = curryTransformation(_rename)
-const select = curryTransformation(_select)
-const slice = curryTransformation(_slice)
-const transmute = curryTransformation(_transmute)
+arrange = curryTransformation(arrange)
+filter = curryTransformation(filter)
+mutate = curryTransformation(mutate)
+pivotLonger = curryTransformation(pivotLonger)
+pivotWider = curryTransformation(pivotWider)
+rename = curryTransformation(rename)
+select = curryTransformation(select)
+slice = curryTransformation(slice)
+summarise = curryTransformation(summarise)
+summariseBy = curryTransformation(summariseBy)
+transmute = curryTransformation(transmute)
 
 export {
   arrange,
@@ -34,5 +38,7 @@ export {
   rename,
   select,
   slice,
+  summarise,
+  summariseBy,
   transmute
 }

@@ -4,7 +4,7 @@ export function min (array) {
 
 export const foldableMin = {
   startValue: Infinity,
-  reduce (currentValue, previousValue) {
+  fold (currentValue, previousValue) {
     return currentValue < previousValue
       ? currentValue
       : previousValue

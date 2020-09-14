@@ -10,7 +10,7 @@ export function sum (array) {
 
 export const foldableSum = {
   startValue: 0,
-  reduce (currentValue, previousValue) {
+  fold (currentValue, previousValue) {
     return previousValue + currentValue
   },
   finally (value, length) {

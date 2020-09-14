@@ -7,7 +7,7 @@ export function mean (array) {
 
 export const foldableMean = {
   startValue: 0,
-  reduce (currentValue, previousValue) {
+  fold (currentValue, previousValue) {
     return previousValue + currentValue
   },
   finally (value, length) {

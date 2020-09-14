@@ -4,7 +4,7 @@ export function count (array) {
 
 export const foldableCount = {
   startValue: -1,
-  reduce (currentValue, previousValue) {
+  fold (currentValue, previousValue) {
     return previousValue + 1
   },
   finally (value, length) {
