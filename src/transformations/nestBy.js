@@ -1,6 +1,6 @@
 import { getDataLength, getId } from '../utils'
 
-export function nest (data, nestColumnName, by, construct) {
+export function nestBy (data, nestColumnName, by, construct) {
   const length = getDataLength(data)
   const newData = initNewData(nestColumnName, by)
 
