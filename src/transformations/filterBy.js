@@ -1,9 +1,9 @@
 import { getDataLength, getId } from '../utils'
 import { initNewData } from './filter.js'
-import { nest } from './nestBy.js'
+import { nestBy } from './nestBy.js'
 
 export function filterBy (data, getCondition, by) {
-  const nestedData = nest(data, '$nested', by)
+  const nestedData = nestBy(data, '$nested', by)
   const nestedDataLength = getDataLength(nestedData)
 
   const conditionPerGroup = {}

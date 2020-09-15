@@ -53,14 +53,14 @@ function initNewData (data, mutateInstructions) {
   return newData
 }
 
-function getMutateColumnNames (mutateInstructions) {
+export function getMutateColumnNames (mutateInstructions) {
   return mutateInstructions.map(instruction => {
     const { key: columnName } = getKeyValuePair(instruction)
     return columnName
   })
 }
 
-function getMutateFunctions (mutateInstructions) {
+export function getMutateFunctions (mutateInstructions) {
   return mutateInstructions.map(instruction => {
     const { value: fn } = getKeyValuePair(instruction)
     return fn
