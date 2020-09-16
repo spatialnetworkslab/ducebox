@@ -15,18 +15,17 @@ export { min } from './reducers/min.js'
 export { mode } from './reducers/mode.js'
 export { sum } from './reducers/sum.js'
 
-export {
-  arrange,
-  filter,
-  filterBy,
-  mutate,
-  mutateBy,
-  nestBy,
-  pivotLonger,
-  pivotWider,
-  rename,
-  select,
-  slice,
-  summarise,
-  summariseBy
-} from './transformations'
+// transformations
+export { arrange } from './transformations/arrange.js'
+export { filter } from './transformations/filter.js'
+export { filterBy } from './transformations/filterBy.js'
+export { mutate } from './transformations/mutate.js'
+export { mutateBy } from './transformations/mutateBy.js'
+export { nestBy } from './transformations/nestBy.js'
+export { pivotLonger } from './transformations/pivotLonger.js'
+export { pivotWider } from './transformations/pivotWider.js'
+export { rename } from './transformations/rename.js'
+export { select } from './transformations/select.js'
+export { slice } from './transformations/slice.js'
+export { summarise } from './transformations/summarise.js'
+export { summariseBy } from './transformations/summariseBy.js'
