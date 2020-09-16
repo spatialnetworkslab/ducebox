@@ -1,8 +1,9 @@
+import { curryTransformation } from './_syntax.js'
 import { getDataLength, getId } from '../utils'
 import { initNewData } from './filter.js'
 import { nestBy } from './nestBy.js'
 
-export function filterBy (data, getCondition, by) {
+let filterBy = function (data, getCondition, by) {
   const nestedData = nestBy(data, '$nested', by)
   const nestedDataLength = getDataLength(nestedData)
 
@@ -34,3 +35,7 @@ export function filterBy (data, getCondition, by) {
 
   return newData
 }
+
+filterBy = curryTransformation(filterBy)
+
+export { filterBy }

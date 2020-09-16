@@ -1,12 +1,17 @@
+import { curryTransformation } from './_syntax.js'
 import { FOLDABLE_REDUCER } from '../symbols.js'
 import { getDataLength, getKeyValuePair, getId } from '../utils'
 import { initNewData as _initNewData } from './summarise.js'
 
-export function summariseBy (data, summariseInstructions, by) {
+let summariseBy = function (data, summariseInstructions, by) {
   return allReducersFoldable(summariseInstructions)
     ? summariseByFoldable(data, summariseInstructions, by)
     : summariseByNonFoldable(data, summariseInstructions, by)
 }
+
+summariseBy = curryTransformation(summariseBy)
+
+export { summariseBy }
 
 function allReducersFoldable (summariseInstructions) {
   for (const newColumnName in summariseInstructions) {

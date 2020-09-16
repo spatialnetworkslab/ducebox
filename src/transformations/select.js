@@ -1,4 +1,6 @@
-export function select (data, ...selectionColumnNames) {
+import { curryTransformation } from './_syntax.js'
+
+let select = function (data, ...selectionColumnNames) {
   const newData = {}
 
   for (const columnName of selectionColumnNames) {
@@ -7,3 +9,7 @@ export function select (data, ...selectionColumnNames) {
 
   return newData
 }
+
+select = curryTransformation(select)
+
+export { select }

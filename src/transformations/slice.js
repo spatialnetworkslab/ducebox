@@ -1,6 +1,7 @@
+import { curryTransformation } from './_syntax.js'
 import { getIndices } from '../utils'
 
-export function slice (data, indices) {
+let slice = function (data, indices) {
   const newData = {}
 
   for (const columnName in data) {
@@ -9,3 +10,7 @@ export function slice (data, indices) {
 
   return newData
 }
+
+slice = curryTransformation(slice)
+
+export { slice }

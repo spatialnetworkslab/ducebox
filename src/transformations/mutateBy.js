@@ -1,8 +1,9 @@
 import { getDataLength, getId } from '../utils'
 import { nestBy } from './nestBy.js'
 import { getMutateColumnNames, getMutateFunctions, initNewData } from './mutate.js'
+import { curryTransformation } from './_syntax'
 
-export function mutateBy (data, ...args) {
+let mutateBy = function (data, ...args) {
   const { mutateInstructions, by } = parseArgs(args)
   const nestedData = nestBy(data, '$nested', by)
   const nestedDataLength = getDataLength(nestedData)
@@ -44,6 +45,10 @@ export function mutateBy (data, ...args) {
 
   return newData
 }
+
+mutateBy = curryTransformation(mutateBy)
+
+export { mutateBy }
 
 function parseArgs (args) {
   const mutateInstructions = []

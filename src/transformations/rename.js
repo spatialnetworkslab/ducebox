@@ -1,4 +1,6 @@
-export function rename (data, renameInstructions) {
+import { curryTransformation } from './_syntax.js'
+
+let rename = function (data, renameInstructions) {
   const newData = Object.assign({}, data)
 
   for (const newColumnName in renameInstructions) {
@@ -9,3 +11,7 @@ export function rename (data, renameInstructions) {
 
   return newData
 }
+
+rename = curryTransformation(rename)
+
+export { rename }

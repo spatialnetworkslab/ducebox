@@ -1,6 +1,7 @@
+import { curryTransformation } from './_syntax.js'
 import { getDataLength } from '../utils'
 
-export function filter (data, condition) {
+let filter = function (data, condition) {
   const dataLength = getDataLength(data)
   const row = {}
   const newData = initNewData(data)
@@ -19,6 +20,10 @@ export function filter (data, condition) {
 
   return newData
 }
+
+filter = curryTransformation(filter)
+
+export { filter }
 
 export function initNewData (data) {
   const newData = {}

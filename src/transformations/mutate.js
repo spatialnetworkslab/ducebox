@@ -1,6 +1,7 @@
+import { curryTransformation } from './_syntax.js'
 import { getDataLength, getKeyValuePair } from '../utils'
 
-export function mutate (data, ...mutateInstructions) {
+let mutate = function (data, ...mutateInstructions) {
   const dataLength = getDataLength(data)
   const newData = initNewData(data, mutateInstructions)
 
@@ -25,18 +26,9 @@ export function mutate (data, ...mutateInstructions) {
   return newData
 }
 
-export function transmute (data, ...transmuteInstructions) {
-  const newData = mutate(data, ...transmuteInstructions)
-  const mutateColumnNames = new Set(getMutateColumnNames(transmuteInstructions))
+mutate = curryTransformation(mutate)
 
-  for (const columnName in newData) {
-    if (!(mutateColumnNames.has(columnName))) {
-      delete newData[columnName]
-    }
-  }
-
-  return newData
-}
+export { mutate }
 
 function initNewData (data, mutateInstructions) {
   const newData = Object.assign({}, data)

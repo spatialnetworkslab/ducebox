@@ -1,6 +1,7 @@
+import { curryTransformation } from './_syntax.js'
 import { getDataLength, getKeyValuePair } from '../utils'
 
-export function summarise (data, summariseInstructions) {
+let summarise = function (data, summariseInstructions) {
   const dataLength = getDataLength(data)
   const newData = initNewData(summariseInstructions)
 
@@ -17,6 +18,10 @@ export function summarise (data, summariseInstructions) {
 
   return newData
 }
+
+summarise = curryTransformation(summarise)
+
+export { summarise }
 
 export function initNewData (summariseInstructions) {
   const newData = {}

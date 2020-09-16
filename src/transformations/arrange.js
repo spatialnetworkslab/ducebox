@@ -1,8 +1,9 @@
+import { curryTransformation } from './_syntax.js'
 import { CURRIED_COMPARE_FN } from '../symbols.js'
 import { slice } from './slice.js'
 import { getKeyValuePair } from '../utils'
 
-export function arrange (data, ...arrangeInstructions) {
+let arrange = function (data, ...arrangeInstructions) {
   let newData
 
   for (let i = arrangeInstructions.length - 1; i >= 0; i--) {
@@ -16,6 +17,10 @@ export function arrange (data, ...arrangeInstructions) {
 
   return newData
 }
+
+arrange = curryTransformation(arrange)
+
+export { arrange }
 
 function arrangeSingleInstruction (data, arrangeInstruction) {
   const { key: columnName } = getKeyValuePair(arrangeInstruction)
