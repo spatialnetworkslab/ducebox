@@ -1,11 +1,12 @@
+import { enableColumnNameSyntax, attachFoldableVersion } from './index.js'
 import { sum } from './sum.js'
 
-export function mean (array) {
+let mean = function (array) {
   const total = sum(array)
   return total / array.length
 }
 
-export const foldableMean = {
+const foldableMean = {
   startValue: 0,
   fold (currentValue, previousValue) {
     return previousValue + currentValue
@@ -14,3 +15,8 @@ export const foldableMean = {
     return value / length
   }
 }
+
+mean = enableColumnNameSyntax(mean)
+mean = attachFoldableVersion(mean, foldableMean)
+
+export { mean }

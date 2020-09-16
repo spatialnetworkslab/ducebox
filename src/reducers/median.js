@@ -1,6 +1,7 @@
-// Translated to JavaScript from https://rcoh.me/posts/linear-time-median-finding/
+import { enableColumnNameSyntax } from './index.js'
 
-export function median (array) {
+// Translated to JavaScript from https://rcoh.me/posts/linear-time-median-finding/
+let median = function (array) {
   const len = array.length
 
   if (len === 1) return array[0]
@@ -14,6 +15,10 @@ export function median (array) {
     )
   }
 }
+
+median = enableColumnNameSyntax(median)
+
+export { median }
 
 function quickselect (array, k) {
   const pivot = pickPivot(array)

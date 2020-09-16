@@ -1,8 +1,10 @@
-export function count (array) {
+import { enableColumnNameSyntax, attachFoldableVersion } from './index.js'
+
+let count = function (array) {
   return array.length
 }
 
-export const foldableCount = {
+const foldableCount = {
   startValue: -1,
   fold (currentValue, previousValue) {
     return previousValue + 1
@@ -11,3 +13,8 @@ export const foldableCount = {
     return value
   }
 }
+
+count = enableColumnNameSyntax(count)
+count = attachFoldableVersion(count, foldableCount)
+
+export { count }

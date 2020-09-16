@@ -1,8 +1,10 @@
-export function min (array) {
+import { enableColumnNameSyntax, attachFoldableVersion } from './index.js'
+
+let min = function (array) {
   return Math.min(...array)
 }
 
-export const foldableMin = {
+const foldableMin = {
   startValue: Infinity,
   fold (currentValue, previousValue) {
     return currentValue < previousValue
@@ -13,3 +15,8 @@ export const foldableMin = {
     return value
   }
 }
+
+min = enableColumnNameSyntax(min)
+min = attachFoldableVersion(min, foldableMin)
+
+export { min }

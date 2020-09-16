@@ -1,8 +1,10 @@
-export function max (array) {
+import { enableColumnNameSyntax, attachFoldableVersion } from './index.js'
+
+let max = function (array) {
   return Math.max(...array)
 }
 
-export const foldableMax = {
+const foldableMax = {
   startValue: -Infinity,
   fold (currentValue, previousValue) {
     return currentValue > previousValue
@@ -13,3 +15,8 @@ export const foldableMax = {
     return value
   }
 }
+
+max = enableColumnNameSyntax(max)
+max = attachFoldableVersion(max, foldableMax)
+
+export { max }

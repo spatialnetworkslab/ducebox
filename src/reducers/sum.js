@@ -1,4 +1,6 @@
-export function sum (array) {
+import { enableColumnNameSyntax, attachFoldableVersion } from './index.js'
+
+let sum = function (array) {
   let total = 0
 
   for (let i = 0; i < array.length; i++) {
@@ -8,7 +10,7 @@ export function sum (array) {
   return total
 }
 
-export const foldableSum = {
+const foldableSum = {
   startValue: 0,
   fold (currentValue, previousValue) {
     return previousValue + currentValue
@@ -17,3 +19,8 @@ export const foldableSum = {
     return value
   }
 }
+
+sum = enableColumnNameSyntax(sum)
+sum = attachFoldableVersion(sum, foldableSum)
+
+export { sum }
