@@ -1,10 +1,10 @@
 import { getDataLength, getKeyValuePair } from '../utils'
 
 export function summarise (data, summariseInstructions) {
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const newData = initNewData(summariseInstructions)
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     for (const newColumnName in summariseInstructions) {
       const {
         key: oldColumnName,

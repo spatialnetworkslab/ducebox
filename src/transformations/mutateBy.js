@@ -23,10 +23,10 @@ export function mutateBy (data, ...args) {
     }
   }
 
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const newData = initNewData(data)
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     const id = getId(data, i, by)
     const row = {}
 

@@ -1,13 +1,13 @@
 import { getDataLength, getKeyValuePair } from '../utils'
 
 export function mutate (data, ...mutateInstructions) {
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const newData = initNewData(data, mutateInstructions)
 
   const mutateColumnNames = getMutateColumnNames(mutateInstructions)
   const mutateFunctions = getMutateFunctions(mutateInstructions)
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     const row = {}
 
     for (const columnName in data) {

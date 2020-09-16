@@ -19,7 +19,7 @@ function allReducersFoldable (summariseInstructions) {
 }
 
 function summariseByFoldable (data, summariseInstructions, by) {
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const newData = initNewData(summariseInstructions, by)
   const groupLengths = []
 
@@ -28,7 +28,7 @@ function summariseByFoldable (data, summariseInstructions, by) {
 
   const foldInstructions = getFoldInstructions(summariseInstructions)
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     const id = getId(data, i, by)
 
     if (!(id in idToRowIndex)) {
@@ -74,7 +74,7 @@ function summariseByFoldable (data, summariseInstructions, by) {
 }
 
 function summariseByNonFoldable (data, summariseInstructions, by) {
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const newData = initNewData(summariseInstructions, by)
 
   let currentRowIndex = -1
@@ -82,7 +82,7 @@ function summariseByNonFoldable (data, summariseInstructions, by) {
 
   const reduceInstructions = getReduceInstructions(summariseInstructions)
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     const id = getId(data, i, by)
 
     if (!(id in idToRowIndex)) {

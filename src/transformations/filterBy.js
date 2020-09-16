@@ -13,11 +13,11 @@ export function filterBy (data, getCondition, by) {
     conditionPerGroup[id] = getCondition(nestedDataLength.$nested[i])
   }
 
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const row = {}
   const newData = initNewData(data)
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     const id = getId(data, i, by)
     const condition = conditionPerGroup[id]
 

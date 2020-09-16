@@ -21,13 +21,13 @@ export function getKeyValuePair (object) {
 }
 
 export function getId (data, rowNumber, columnNames) {
-  let id = ''
+  let id = '$'
 
   for (let i = 0; i < columnNames.length; i++) {
     const columnName = columnNames[i]
 
-    id += '$'
     id += data[columnName][rowNumber].toString()
+    id += '$'
   }
 
   return id

@@ -1,13 +1,13 @@
 import { getDataLength, getId } from '../utils'
 
 export function nestBy (data, nestColumnName, by, construct) {
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const newData = initNewData(nestColumnName, by)
 
   let currentRowIndex = -1
   const idToRowIndex = {}
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     const id = getId(data, i, by)
 
     if (!(id in idToRowIndex)) {

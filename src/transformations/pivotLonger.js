@@ -12,10 +12,10 @@ export function pivotLonger (
   const pivotColumnNamesSet = new Set(pivotColumnNames)
   const idColumnNames = dataColumnNames.filter(columnName => !pivotColumnNamesSet.has(columnName))
 
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const newData = initNewData(idColumnNames, namesTo, valuesTo)
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     for (let j = 0; j < pivotColumnNames.length; j++) {
       const pivotColumnName = pivotColumnNames[j]
       const pivotColumnValue = data[pivotColumnName][i]

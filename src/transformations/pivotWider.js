@@ -8,7 +8,7 @@ export function pivotWider (
     valuesFill = null
   }
 ) {
-  const length = getDataLength(data)
+  const dataLength = getDataLength(data)
   const idColumnNames = Object.keys(data).filter(columnName => {
     return columnName !== namesFrom && columnName !== valuesFrom
   })
@@ -16,14 +16,14 @@ export function pivotWider (
   const newData = initNewData(
     idColumnNames,
     data[namesFrom],
-    length,
+    dataLength,
     valuesFill
   )
 
   let currentRowIndex = -1
   const idToRowIndex = {}
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < dataLength; i++) {
     const id = getId(data, i, idColumnNames)
 
     if (!(id in idToRowIndex)) {
@@ -51,7 +51,7 @@ export function pivotWider (
   return newData
 }
 
-function initNewData (idColumnNames, namesFromColumn, length, valuesFill) {
+function initNewData (idColumnNames, namesFromColumn, dataLength, valuesFill) {
   const newData = {}
   const newColumns = new Set(namesFromColumn)
 
@@ -60,7 +60,7 @@ function initNewData (idColumnNames, namesFromColumn, length, valuesFill) {
   }
 
   for (const columnName of newColumns) {
-    newData[columnName] = new Array(length).fill(valuesFill)
+    newData[columnName] = new Array(dataLength).fill(valuesFill)
   }
 
   return newData
