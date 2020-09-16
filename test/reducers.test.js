@@ -6,7 +6,7 @@ import {
   min,
   mode,
   sum
-} from '../src/reducers'
+} from '../src'
 
 describe('reducers', () => {
   test('all reducers except count give null on empty array', () => {

@@ -1,4 +1,4 @@
-import { enableColumnNameSyntax } from './index.js'
+import { enableColumnNameSyntax } from './_syntax.js'
 
 // Translated to JavaScript from https://rcoh.me/posts/linear-time-median-finding/
 let median = function (array) {

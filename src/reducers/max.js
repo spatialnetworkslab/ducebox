@@ -1,4 +1,4 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './index.js'
+import { enableColumnNameSyntax, attachFoldableVersion } from './_syntax.js'
 
 let max = function (array) {
   return Math.max(...array)
