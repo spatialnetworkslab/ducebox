@@ -8,11 +8,7 @@ let arrange = function (data, ...arrangeInstructions) {
 
   for (let i = arrangeInstructions.length - 1; i >= 0; i--) {
     const arrangeInstruction = arrangeInstructions[i]
-
-    newData = arrangeSingleInstruction(
-      newData ? data : newData,
-      arrangeInstruction
-    )
+    newData = arrangeSingleInstruction(newData || data, arrangeInstruction)
   }
 
   return newData
