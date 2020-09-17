@@ -9,15 +9,6 @@ import {
 } from '../src'
 
 describe('reducers', () => {
-  test('all reducers except count give null on empty array', () => {
-    expect(max([])).toBeNull()
-    expect(mean([])).toBeNull()
-    expect(median([])).toBeNull()
-    expect(min([])).toBeNull()
-    expect(mode([])).toBeNull()
-    expect(sum([])).toBeNull()
-  })
-
   test('count gives correct value', () => {
     expect(count([10, 20, 30])).toBe(3)
   })

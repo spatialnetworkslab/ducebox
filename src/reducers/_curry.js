@@ -7,7 +7,7 @@ export function enableColumnNameSyntax (fn) {
       return { [arg]: fn }
     }
 
-    if (arg.constrctor === Array) {
+    if (arg.constructor === Array) {
       return fn(arg)
     }
   }
