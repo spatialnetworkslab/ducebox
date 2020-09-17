@@ -1,4 +1,4 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_syntax.js'
+import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
 
 let count = function (array) {
   return array.length
