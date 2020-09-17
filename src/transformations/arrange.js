@@ -31,7 +31,7 @@ function arrangeSingleInstruction (data, arrangeInstruction) {
   const indices = array.map((_, i) => i)
   const arrangedIndices = indices.sort((a, b) => compareFunction(array[a], array[b]))
 
-  return slice(data, arrangedIndices)
+  return slice(arrangedIndices)(data)
 }
 
 function getCompareFunction (fn) {

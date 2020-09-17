@@ -4,7 +4,7 @@ import { initNewData } from './filter.js'
 import { nestBy } from './nestBy.js'
 
 let filterBy = function (data, getCondition, by) {
-  const nestedData = nestBy(data, '$nested', by)
+  const nestedData = nestBy('$nested', by)(data)
   const nestedDataLength = getDataLength(nestedData)
 
   const conditionPerGroup = {}

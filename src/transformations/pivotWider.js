@@ -1,6 +1,5 @@
 import { curryTransformation } from './_syntax.js'
 import { getDataLength, getId } from '../utils'
-import { pivotLonger } from './pivotLonger.js'
 
 let pivotWider = function (
   data,
@@ -53,7 +52,7 @@ let pivotWider = function (
   return newData
 }
 
-pivotWider = curryTransformation(pivotLonger)
+pivotWider = curryTransformation(pivotWider)
 
 export { pivotWider }
 

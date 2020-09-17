@@ -5,7 +5,7 @@ import { curryTransformation } from './_syntax'
 
 let mutateBy = function (data, ...args) {
   const { mutateInstructions, by } = parseArgs(args)
-  const nestedData = nestBy(data, '$nested', by)
+  const nestedData = nestBy('$nested', by)(data)
   const nestedDataLength = getDataLength(nestedData)
 
   const mutateColumnNames = getMutateColumnNames(mutateInstructions)
