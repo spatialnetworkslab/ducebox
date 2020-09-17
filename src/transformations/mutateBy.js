@@ -1,7 +1,7 @@
 import { getDataLength, getId } from '../utils'
 import { nestBy } from './nestBy.js'
 import { getMutateColumnNames, getMutateFunctions, initNewData } from './mutate.js'
-import { curryTransformation } from './_syntax'
+import { curryTransformation } from './_curry.js'
 
 let mutateBy = function (data, ...args) {
   const { mutateInstructions, by } = parseArgs(args)

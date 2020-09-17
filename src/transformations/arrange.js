@@ -1,4 +1,4 @@
-import { curryTransformation } from './_syntax.js'
+import { curryTransformation } from './_curry.js'
 import { CURRIED_COMPARE_FN } from '../symbols.js'
 import { slice } from './slice.js'
 import { getKeyValuePair } from '../utils'

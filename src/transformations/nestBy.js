@@ -1,4 +1,4 @@
-import { curryTransformation } from './_syntax.js'
+import { curryTransformation } from './_curry.js'
 import { getDataLength, getId } from '../utils'
 
 let nestBy = function (data, nestColumnName, by, construct) {

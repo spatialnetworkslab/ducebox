@@ -1,4 +1,4 @@
-import { curryTransformation } from './_syntax.js'
+import { curryTransformation } from './_curry.js'
 
 let rename = function (data, renameInstructions) {
   const newData = Object.assign({}, data)

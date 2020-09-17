@@ -1,4 +1,4 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_syntax.js'
+import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
 
 let mode = function (array) {
   const occurrences = getOccurrences(array)

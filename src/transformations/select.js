@@ -1,4 +1,4 @@
-import { curryTransformation } from './_syntax.js'
+import { curryTransformation } from './_curry.js'
 
 let select = function (data, ...selectionColumnNames) {
   const newData = {}

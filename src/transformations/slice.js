@@ -1,4 +1,4 @@
-import { curryTransformation } from './_syntax.js'
+import { curryTransformation } from './_curry.js'
 import { getIndices } from '../utils'
 
 let slice = function (data, indices) {

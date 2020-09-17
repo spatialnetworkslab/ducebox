@@ -1,4 +1,4 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_syntax.js'
+import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
 
 let min = function (array) {
   return Math.min(...array)

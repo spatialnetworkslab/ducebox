@@ -1,4 +1,4 @@
-import { curryTransformation } from './_syntax.js'
+import { curryTransformation } from './_curry.js'
 import { getDataLength, getKeyValuePair } from '../utils'
 
 let mutate = function (data, ...mutateInstructions) {

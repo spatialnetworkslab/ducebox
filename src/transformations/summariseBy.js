@@ -1,4 +1,4 @@
-import { curryTransformation } from './_syntax.js'
+import { curryTransformation } from './_curry.js'
 import { FOLDABLE_REDUCER } from '../symbols.js'
 import { getDataLength, getKeyValuePair, getId } from '../utils'
 import { initNewData as _initNewData } from './summarise.js'
