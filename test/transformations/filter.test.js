@@ -6,7 +6,7 @@ const testData = {
 }
 
 describe('transformations: filter', () => {
-  test('filter works as expected (1)', () => {
+  test('works as expected (1)', () => {
     const expectedData = {
       col1: [3, 4, 5],
       col2: ['c', 'd', 'e']
@@ -17,7 +17,7 @@ describe('transformations: filter', () => {
     expect(transformation(testData)).toEqual(expectedData)
   })
 
-  test('filter works as expected (2)', () => {
+  test('works as expected (2)', () => {
     const expectedData = testData
 
     const transformation = filter(row => row.col1 < 6)

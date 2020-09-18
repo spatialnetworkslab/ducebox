@@ -26,7 +26,7 @@ export function getId (data, rowNumber, columnNames) {
   for (let i = 0; i < columnNames.length; i++) {
     const columnName = columnNames[i]
 
-    id += data[columnName][rowNumber].toString()
+    id += data[columnName][rowNumber]
     id += '$'
   }
 
