@@ -3,15 +3,23 @@ import { FOLDABLE_REDUCER } from '../symbols.js'
 import { getDataLength, getKeyValuePair, getId } from '../utils'
 import { initNewData as _initNewData } from './summarise.js'
 
-let summariseBy = function (data, summariseInstructions, by) {
+let summarise = function (data, summariseInstructions, by = []) {
+  if (by.length === 0) {
+    return summariseNotBy(data, summariseInstructions)
+  }
+
   return allReducersFoldable(summariseInstructions)
     ? summariseByFoldable(data, summariseInstructions, by)
     : summariseByNonFoldable(data, summariseInstructions, by)
 }
 
-summariseBy = curryTransformation(summariseBy)
+summarise = curryTransformation(summarise)
 
-export { summariseBy }
+export { summarise }
+
+function summariseNotBy (data, summariseInstructions) {
+  // TODO
+}
 
 function allReducersFoldable (summariseInstructions) {
   for (const newColumnName in summariseInstructions) {

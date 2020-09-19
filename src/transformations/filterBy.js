@@ -1,14 +1,14 @@
 import { curryTransformation } from './_curry.js'
 import { getDataLength, getId } from '../utils'
 import { initNewData, filter } from './filter.js'
-import { nestBy } from './nest.js'
+import { nest } from './nest.js'
 
 let filterBy = function (data, getCondition, by = []) {
   if (by.length === 0) {
     return filter(getCondition(data))(data)
   }
 
-  const nestedData = nestBy('$nested', by)(data)
+  const nestedData = nest('$nested', by)(data)
   const nestedDataLength = getDataLength(nestedData)
 
   const conditionPerGroup = {}
