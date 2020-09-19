@@ -1,7 +1,7 @@
 import { curryTransformation } from './_curry.js'
 import { getDataLength, getId } from '../utils'
 
-let nestBy = function (data, nestColumnName, by = [], construct) {
+let nest = function (data, nestColumnName, by = [], construct) {
   if (by.length === 0) {
     return { $nested: [data] }
   }
@@ -47,9 +47,9 @@ let nestBy = function (data, nestColumnName, by = [], construct) {
   return newData
 }
 
-nestBy = curryTransformation(nestBy)
+nest = curryTransformation(nest)
 
-export { nestBy }
+export { nest }
 
 function initNewData (nestColumnName, by) {
   const newData = { [nestColumnName]: [] }

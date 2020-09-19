@@ -1,7 +1,7 @@
 import { curryTransformation } from './_curry.js'
 import { getDataLength, getId } from '../utils'
 import { initNewData, filter } from './filter.js'
-import { nestBy } from './nestBy.js'
+import { nestBy } from './nest.js'
 
 let filterBy = function (data, getCondition, by = []) {
   if (by.length === 0) {
