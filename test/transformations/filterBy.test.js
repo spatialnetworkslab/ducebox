@@ -11,7 +11,7 @@ const priceGreaterThanMean = cols => {
 }
 
 describe('transformations: filterBy', () => {
-  test('filterBy works without providing by', () => {
+  test('works without providing by', () => {
     const expectedData = {
       fruit: ['coconut', 'banana', 'banana', 'apple', 'durian'],
       price: [5.2, 5.1, 7.5, 5.4, 5.9]
@@ -22,7 +22,7 @@ describe('transformations: filterBy', () => {
     expect(transformation(testData)).toEqual(expectedData)
   })
 
-  test('filterBy works if by is empty array', () => {
+  test('works if by is empty array', () => {
     const expectedData = {
       fruit: ['coconut', 'banana', 'banana', 'apple', 'durian'],
       price: [5.2, 5.1, 7.5, 5.4, 5.9]
@@ -33,7 +33,7 @@ describe('transformations: filterBy', () => {
     expect(transformation(testData)).toEqual(expectedData)
   })
 
-  test('filterBy works with one by column', () => {
+  test('works with one by column', () => {
     const expectedData = {
       fruit: ['coconut', 'banana', 'apple', 'durian'],
       price: [5.2, 7.5, 5.4, 5.9]
@@ -44,7 +44,7 @@ describe('transformations: filterBy', () => {
     expect(transformation(testData)).toEqual(expectedData)
   })
 
-  test('filterBy works with two by columns', () => {
+  test('works with two by columns', () => {
     const moreElaborateTestData = {
       fruit: ['coconut', 'coconut', 'coconut', 'coconut', 'banana', 'banana', 'banana', 'banana'],
       origin: ['brazil', 'brazil', 'uganda', 'uganda', 'brazil', 'brazil', 'uganda', 'uganda'],

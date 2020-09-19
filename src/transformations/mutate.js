@@ -15,11 +15,15 @@ let mutate = function (data, ...mutateInstructions) {
       row[columnName] = data[columnName][i]
     }
 
-    for (let i = 0; i < mutateColumnNames.length; i++) {
-      const columnName = mutateColumnNames[i]
-      const mutateFunction = mutateFunctions[i]
+    for (let j = 0; j < mutateColumnNames.length; j++) {
+      const columnName = mutateColumnNames[j]
+      const mutateFunction = mutateFunctions[j]
 
-      newData[columnName].push(mutateFunction(row, i))
+      row[columnName] = mutateFunction(row, i)
+    }
+
+    for (const columnName in row) {
+      newData[columnName].push(row[columnName])
     }
   }
 
@@ -31,15 +35,17 @@ mutate = curryTransformation(mutate)
 export { mutate }
 
 function initNewData (data, mutateInstructions) {
-  const newData = Object.assign({}, data)
+  const newData = {}
 
   const dataColumnNames = new Set(Object.keys(data))
   const mutateColumnNames = getMutateColumnNames(mutateInstructions)
 
+  for (const columnName of dataColumnNames) {
+    newData[columnName] = []
+  }
+
   for (const columnName of mutateColumnNames) {
-    if (!dataColumnNames.has(columnName)) {
-      newData[columnName] = []
-    }
+    newData[columnName] = []
   }
 
   return newData
