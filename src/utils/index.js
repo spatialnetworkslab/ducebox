@@ -32,3 +32,18 @@ export function getId (data, rowNumber, columnNames) {
 
   return id
 }
+
+export function shallowCopy (data) {
+  const dataLength = getDataLength(data)
+  const newData = {}
+
+  for (const columnName in data) {
+    newData[columnName] = []
+
+    for (let i = 0; i < dataLength; i++) {
+      newData[columnName].push(data[columnName][i])
+    }
+  }
+
+  return newData
+}
