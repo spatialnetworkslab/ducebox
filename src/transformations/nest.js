@@ -3,7 +3,7 @@ import { getDataLength, getId } from '../utils'
 
 let nest = function (data, nestColumnName, by = [], construct) {
   if (by.length === 0) {
-    return { $nested: [data] }
+    return { [nestColumnName]: [data] }
   }
 
   const dataLength = getDataLength(data)
@@ -11,6 +11,8 @@ let nest = function (data, nestColumnName, by = [], construct) {
 
   let currentRowIndex = -1
   const idToRowIndex = {}
+
+  const notByColumns = Object.keys(data).filter(columnName => !by.includes(columnName))
 
   for (let i = 0; i < dataLength; i++) {
     const id = getId(data, i, by)
@@ -24,12 +26,14 @@ let nest = function (data, nestColumnName, by = [], construct) {
         newData[columnName].push(data[columnName][i])
       }
 
-      newData[nestColumnName].push(initNestedData(data))
+      newData[nestColumnName].push(initNestedData(notByColumns))
     }
 
     const rowIndex = idToRowIndex[id]
 
-    for (const columnName in data) {
+    for (let j = 0; j < notByColumns.length; j++) {
+      const columnName = notByColumns[j]
+
       newData[nestColumnName][rowIndex][columnName].push(
         data[columnName][i]
       )
@@ -61,10 +65,10 @@ function initNewData (nestColumnName, by) {
   return newData
 }
 
-function initNestedData (data) {
+function initNestedData (notByColumns) {
   const nestedData = {}
 
-  for (const columnName in data) {
+  for (const columnName of notByColumns) {
     nestedData[columnName] = []
   }
 
