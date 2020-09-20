@@ -1,4 +1,4 @@
-import { nest } from '../../src'
+import { nest, toRowOriented } from '../../src'
 
 const testData = {
   fruit: ['coconut', 'coconut', 'banana', 'banana', 'apple', 'apple', 'durian', 'durian'],
@@ -32,9 +32,21 @@ describe('transformations: nest', () => {
     expect(transformation(testData)).toEqual(expectedData)
   })
 
-  // test('works grouped by 1 column and construct fn', () => {
+  test('works grouped by 1 column and construct fn', () => {
+    const expectedData = {
+      fruit: ['coconut', 'banana', 'apple', 'durian'],
+      nested: [
+        [{ price: 5.2 }, { price: 4.4 }],
+        [{ price: 5.1 }, { price: 7.5 }],
+        [{ price: 3.8 }, { price: 5.4 }],
+        [{ price: 3.3 }, { price: 5.9 }]
+      ]
+    }
 
-  // })
+    const transformation = nest('nested', ['fruit'], toRowOriented)
+
+    expect(transformation(testData)).toEqual(expectedData)
+  })
 
   // test('works grouped by 2 columns', () => {
 
