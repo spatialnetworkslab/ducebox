@@ -34,7 +34,7 @@ mutate = curryTransformation(mutate)
 
 export { mutate }
 
-function initNewData (data, mutateInstructions) {
+export function initNewData (data, mutateInstructions) {
   const newData = {}
 
   const dataColumnNames = new Set(Object.keys(data))
