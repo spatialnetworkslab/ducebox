@@ -38,7 +38,7 @@ let pivotWider = function (
     }
 
     const rowIndex = idToRowIndex[id]
-    const columnName = data[valuesFrom][i]
+    const columnName = data[namesFrom][i]
 
     newData[columnName][rowIndex] = data[valuesFrom][i]
   }
