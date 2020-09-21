@@ -5,7 +5,9 @@
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
-    "@dynatrace/zakzak": "^0.5.0",
+    "@dynatrace/zakzak": "^0.6.3",
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
     "dataframe-js": "^1.4.3",
     "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
@@ -16,15 +18,13 @@
     "jest": "^24.9.0",
     "lazy.js": "^0.5.1",
     "ramda": "^0.26.1",
-    "rollup": "^1.26.2",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup": "^1.26.2"
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
-    "perf": "yarn build && yarn run zakzak"
+    "perf": "npm run build && npm run zakzak"
   },
   "files": [
     "dist"
@@ -34,5 +34,6 @@
     "testPathIgnorePatterns": [
       "/__data__/"
     ]
-  }
+  },
+  "dependencies": {}
 }

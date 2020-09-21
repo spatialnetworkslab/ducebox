@@ -17,7 +17,7 @@
 	"manager": {
 		"runParallel": 1,
 		"pattern": "./**/*.benchmark.js",
-		"path": "./",
+		"path": "./perf",
 		"exporter": [
 			"console"
 		]
