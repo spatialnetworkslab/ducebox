@@ -29,7 +29,6 @@ function toRowOriented (columnOrientedData) {
   return rowData
 }
 
-
 describe('transformations: nest', () => {
   test('works without by', () => {
     const expectedData = {
