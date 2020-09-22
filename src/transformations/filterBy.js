@@ -1,5 +1,5 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength, getId } from '../utils'
+import { getDataLength, getId } from '../utils/index.js'
 import { initNewData, filter } from './filter.js'
 import { nest } from './nest.js'
 

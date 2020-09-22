@@ -1,4 +1,4 @@
-import { getDataLength } from '../utils'
+import { getDataLength } from '../utils/index.js'
 import { ARGS, FN_NAME } from '../symbols.js'
 
 const rowTransformations = new Set(['filter', 'mutate', 'select'])

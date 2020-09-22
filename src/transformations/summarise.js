@@ -1,6 +1,6 @@
 import { curryTransformation } from './_curry.js'
 import { FOLDABLE_REDUCER } from '../symbols.js'
-import { getDataLength, getKeyValuePair, getId } from '../utils'
+import { getDataLength, getKeyValuePair, getId } from '../utils/index.js'
 
 let summarise = function (data, summariseInstructions, by = []) {
   if (by.length === 0) {

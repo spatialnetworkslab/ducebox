@@ -1,4 +1,4 @@
-import { getDataLength } from '../utils'
+import { getDataLength } from '../utils/index.js'
 
 export function toRowOriented (columnOrientedData) {
   const rowData = []

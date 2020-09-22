@@ -4,7 +4,7 @@ export {
   descending,
   ascendingStr,
   descendingStr
-} from './compare'
+} from './compare/index.js'
 
 // io
 export { toRowOriented } from './io/toRowOriented.js'

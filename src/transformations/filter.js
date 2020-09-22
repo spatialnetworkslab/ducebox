@@ -1,5 +1,5 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength } from '../utils'
+import { getDataLength } from '../utils/index.js'
 
 let filter = function (data, condition) {
   const dataLength = getDataLength(data)
