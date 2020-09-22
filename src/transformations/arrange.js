@@ -22,10 +22,10 @@ function arrangeSingleInstruction (data, arrangeInstruction) {
   const { key: columnName } = getKeyValuePair(arrangeInstruction)
   const compareFunction = getCompareFunction(arrangeInstruction[columnName])
 
-  const array = data[columnName]
+  const column = data[columnName]
 
-  const indices = array.map((_, i) => i)
-  const arrangedIndices = indices.sort((a, b) => compareFunction(array[a], array[b]))
+  const indices = column.map((_, i) => i)
+  const arrangedIndices = indices.sort((a, b) => compareFunction(column[a], column[b]))
 
   return slice(arrangedIndices)(data)
 }

@@ -7,7 +7,7 @@ export function forEachRow (data, fn) {
     const row = {}
 
     for (const columnName in data) row[columnName] = data[columnName][i]
-    fn(row)
+    fn(row, i)
   }
 }
 
@@ -17,6 +17,6 @@ export function forRowByIndex (data, indices, fn) {
     const row = {}
 
     for (const columnName in data) row[columnName] = data[columnName][index]
-    fn(row)
+    fn(row, index)
   }
 }
