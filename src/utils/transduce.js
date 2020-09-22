@@ -1,6 +1,15 @@
 export function transduce (source, rowTransformation, sink) {
-  source.forEach((row, i) => {
-    const transformedRow = rowTransformation(row, i)
-    if (transformedRow) sink(transformedRow)
-  })
+  return function (inputData, ...args) {
+    const outputData = sink.init(
+      source.getColumnNames(inputData),
+      args
+    )
+
+    source.forEach(inputData, (row, i) => {
+      const transformedRow = rowTransformation(row, i)
+      if (transformedRow) sink.addRow(outputData, transformedRow)
+    })
+
+    return sink.prepareOutput(outputData)
+  }
 }
