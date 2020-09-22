@@ -1,5 +1,5 @@
 import { curryTransformation } from './_curry.js'
-import { getIndices } from '../utils/index.js'
+import { getIndices } from '../utils/misc.js'
 
 let slice = function (data, indices) {
   const newData = {}

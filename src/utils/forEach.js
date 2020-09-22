@@ -1,4 +1,4 @@
-import { getDataLength } from './index.js'
+import { getDataLength } from './misc.js'
 
 export function forEachRow (data, fn) {
   const dataLength = getDataLength(data)

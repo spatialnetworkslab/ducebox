@@ -1,4 +1,4 @@
-import { getDataLength, getId, getKeyValuePair, shallowCopy } from '../utils/index.js'
+import { getDataLength, getId, getKeyValuePair, shallowCopy } from '../utils/misc.js'
 import { nest } from './nest.js'
 import { mutate } from './mutate.js'
 import { curryTransformation } from './_curry.js'

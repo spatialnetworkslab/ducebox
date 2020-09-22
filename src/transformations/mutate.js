@@ -1,5 +1,5 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength, getKeyValuePair } from '../utils/index.js'
+import { getDataLength, getKeyValuePair } from '../utils/misc.js'
 
 let mutate = function (data, ...mutateInstructions) {
   const dataLength = getDataLength(data)

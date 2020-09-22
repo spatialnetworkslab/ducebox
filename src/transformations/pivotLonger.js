@@ -1,5 +1,5 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength } from '../utils/index.js'
+import { getDataLength } from '../utils/misc.js'
 
 let pivotLonger = function (
   data,
