@@ -1,13 +1,45 @@
 import { getDataLength } from '../utils'
+import { ARGS, FN_NAME } from '../symbols.js'
 
-export function compile (fns) {
+const rowTransformations = new Set(['filter', 'mutate', 'select'])
+
+export function combine (fns) {
   const rowOperations = getRowOperations(fns)
   const sink = createSink(fns)
 
   return createOptimizedTransformation(rowOperations, sink)
 }
 
-function getRowOperations () {}
+function getRowOperations (fns) {
+  const rowOperations = []
+
+  for (const fn of fns) {
+    const type = fn[FN_NAME]
+
+    if (rowTransformations.has(type)) {
+      const args = fn[ARGS]
+      rowOperations.push(parseRowOperation(type, args))
+    }
+  }
+
+  return rowOperations
+}
+
+function parseRowOperation (type, args) {
+  const rowOperation = { type }
+
+  if (type === 'filter') {
+
+  }
+
+  if (type === 'mutate') {
+
+  }
+
+  if (type === 'select') {
+
+  }
+}
 
 function createSink () {}
 
