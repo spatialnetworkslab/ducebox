@@ -1,5 +1,5 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength, getId } from '../utils/misc.js'
+import { getNrow, getId } from '../utils/misc.js'
 
 let pivotWider = function (
   data,
@@ -9,7 +9,7 @@ let pivotWider = function (
     valuesFill = null
   }
 ) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const idColumnNames = Object.keys(data).filter(columnName => {
     return columnName !== namesFrom && columnName !== valuesFrom
   })
@@ -17,14 +17,14 @@ let pivotWider = function (
   const newData = initNewData(
     idColumnNames,
     data[namesFrom],
-    dataLength,
+    nrow,
     valuesFill
   )
 
   let currentRowIndex = -1
   const idToRowIndex = {}
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     const id = getId(data, i, idColumnNames)
 
     if (!(id in idToRowIndex)) {
@@ -43,10 +43,10 @@ let pivotWider = function (
     newData[columnName][rowIndex] = data[valuesFrom][i]
   }
 
-  const newDataLength = newData[idColumnNames[0]].length
+  const newNrow = newData[idColumnNames[0]].length
 
   for (const columnName in newData) {
-    newData[columnName].length = newDataLength
+    newData[columnName].length = newNrow
   }
 
   return newData
@@ -56,7 +56,7 @@ pivotWider = curryTransformation(pivotWider)
 
 export { pivotWider }
 
-function initNewData (idColumnNames, namesFromColumn, dataLength, valuesFill) {
+function initNewData (idColumnNames, namesFromColumn, nrow, valuesFill) {
   const newData = {}
   const newColumns = new Set(namesFromColumn)
 
@@ -65,7 +65,7 @@ function initNewData (idColumnNames, namesFromColumn, dataLength, valuesFill) {
   }
 
   for (const columnName of newColumns) {
-    newData[columnName] = new Array(dataLength).fill(valuesFill)
+    newData[columnName] = new Array(nrow).fill(valuesFill)
   }
 
   return newData

@@ -1,6 +1,6 @@
 import { curryTransformation } from './_curry.js'
 import { FOLDABLE_REDUCER } from '../symbols.js'
-import { getDataLength, getKeyValuePair, getId } from '../utils/misc.js'
+import { getNrow, getKeyValuePair, getId } from '../utils/misc.js'
 
 let summarise = function (data, summariseInstructions, by = []) {
   if (by.length === 0) {
@@ -17,12 +17,12 @@ summarise = curryTransformation(summarise)
 export { summarise }
 
 function summariseNotBy (data, summariseInstructions) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const newData = initNewData(summariseInstructions)
 
   const reduceInstructions = getReduceInstructions(summariseInstructions)
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     for (const newColumnName in reduceInstructions) {
       const { oldColumnName, reducer } = reduceInstructions[newColumnName]
       newData[newColumnName].push(reducer(data[oldColumnName]))
@@ -43,7 +43,7 @@ function allReducersFoldable (summariseInstructions) {
 }
 
 function summariseByFoldable (data, summariseInstructions, by) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const newData = initNewData(summariseInstructions, by)
   const groupLengths = []
 
@@ -52,7 +52,7 @@ function summariseByFoldable (data, summariseInstructions, by) {
 
   const foldInstructions = getFoldInstructions(summariseInstructions)
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     const id = getId(data, i, by)
 
     if (!(id in idToRowIndex)) {
@@ -83,10 +83,10 @@ function summariseByFoldable (data, summariseInstructions, by) {
     groupLengths[rowIndex]++
   }
 
-  const newDataLength = getDataLength(newData)
+  const newNrow = getNrow(newData)
 
   for (const newColumnName in foldInstructions) {
-    for (let i = 0; i < newDataLength; i++) {
+    for (let i = 0; i < newNrow; i++) {
       newData[newColumnName][i] = foldInstructions[newColumnName].finally(
         newData[newColumnName][i],
         groupLengths[i]
@@ -98,7 +98,7 @@ function summariseByFoldable (data, summariseInstructions, by) {
 }
 
 function summariseByNonFoldable (data, summariseInstructions, by) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const newData = initNewData(summariseInstructions, by)
 
   let currentRowIndex = -1
@@ -106,7 +106,7 @@ function summariseByNonFoldable (data, summariseInstructions, by) {
 
   const reduceInstructions = getReduceInstructions(summariseInstructions)
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     const id = getId(data, i, by)
 
     if (!(id in idToRowIndex)) {
@@ -131,12 +131,12 @@ function summariseByNonFoldable (data, summariseInstructions, by) {
     }
   }
 
-  const newDataLength = getDataLength(newData)
+  const newNrow = getNrow(newData)
 
   for (const newColumnName in reduceInstructions) {
     const { reducer } = reduceInstructions[newColumnName]
 
-    for (let i = 0; i < newDataLength; i++) {
+    for (let i = 0; i < newNrow; i++) {
       newData[newColumnName][i] = reducer(newData[newColumnName][i])
     }
   }

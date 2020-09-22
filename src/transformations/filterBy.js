@@ -1,5 +1,5 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength, getId } from '../utils/misc.js'
+import { getNrow, getId } from '../utils/misc.js'
 import { initNewData, filter } from './filter.js'
 import { nest } from './nest.js'
 
@@ -9,20 +9,20 @@ let filterBy = function (data, getCondition, by = []) {
   }
 
   const nestedData = nest('$nested', by)(data)
-  const nestedDataLength = getDataLength(nestedData)
+  const nestedNrow = getNrow(nestedData)
 
   const conditionPerGroup = {}
 
-  for (let i = 0; i < nestedDataLength; i++) {
+  for (let i = 0; i < nestedNrow; i++) {
     const id = getId(nestedData, i, by)
     conditionPerGroup[id] = getCondition(nestedData.$nested[i])
   }
 
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const row = {}
   const newData = initNewData(data)
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     const id = getId(data, i, by)
     const condition = conditionPerGroup[id]
 

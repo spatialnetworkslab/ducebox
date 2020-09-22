@@ -1,12 +1,12 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength, getId } from '../utils/misc.js'
+import { getNrow, getId } from '../utils/misc.js'
 
 let nest = function (data, nestColumnName, by = [], construct) {
   if (by.length === 0) {
     return { [nestColumnName]: [data] }
   }
 
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const newData = initNewData(nestColumnName, by)
 
   let currentRowIndex = -1
@@ -14,7 +14,7 @@ let nest = function (data, nestColumnName, by = [], construct) {
 
   const notByColumns = Object.keys(data).filter(columnName => !by.includes(columnName))
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     const id = getId(data, i, by)
 
     if (!(id in idToRowIndex)) {
@@ -41,9 +41,9 @@ let nest = function (data, nestColumnName, by = [], construct) {
   }
 
   if (construct) {
-    const newDataLength = getDataLength(newData)
+    const newNrow = getNrow(newData)
 
-    for (let i = 0; i < newDataLength; i++) {
+    for (let i = 0; i < newNrow; i++) {
       newData[nestColumnName][i] = construct(newData[nestColumnName][i])
     }
   }

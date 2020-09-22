@@ -1,10 +1,10 @@
-import { getDataLength } from '../utils/misc.js'
+import { getNrow } from '../utils/misc.js'
 
 export function toRowOriented (columnOrientedData) {
   const rowData = []
-  const dataLength = getDataLength(columnOrientedData)
+  const nrow = getNrow(columnOrientedData)
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     const row = {}
 
     for (const columnName in columnOrientedData) {

@@ -1,9 +1,9 @@
-import { getDataLength } from './misc.js'
+import { getNrow } from './misc.js'
 
 export function forEachRow (data, fn) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     const row = {}
 
     for (const columnName in data) row[columnName] = data[columnName][i]

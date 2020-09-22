@@ -1,4 +1,4 @@
-import { getDataLength, getId, getKeyValuePair, shallowCopy } from '../utils/misc.js'
+import { getNrow, getId, getKeyValuePair, shallowCopy } from '../utils/misc.js'
 import { nest } from './nest.js'
 import { mutate } from './mutate.js'
 import { curryTransformation } from './_curry.js'
@@ -54,14 +54,14 @@ function mutateWithoutBy (data, mutateInstructions) {
 }
 
 function _mutateBy (data, mutateInstructions, by) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const newData = initNewData(data, mutateInstructions)
 
   let firstRound = true
 
   for (const mutateInstruction of mutateInstructions) {
     const nestedData = nest('$nested', by)(firstRound ? data : newData)
-    const nestedDataLength = getDataLength(nestedData)
+    const nestedNrow = getNrow(nestedData)
 
     const {
       key: mutateColumnName,
@@ -70,12 +70,12 @@ function _mutateBy (data, mutateInstructions, by) {
 
     const mutateFunctionHolder = {}
 
-    for (let i = 0; i < nestedDataLength; i++) {
+    for (let i = 0; i < nestedNrow; i++) {
       const id = getId(nestedData, i, by)
       mutateFunctionHolder[id] = getMutateFunction(nestedData.$nested[i])
     }
 
-    for (let i = 0; i < dataLength; i++) {
+    for (let i = 0; i < nrow; i++) {
       const id = getId(data, i, by)
       const row = {}
 

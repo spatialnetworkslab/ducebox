@@ -1,14 +1,14 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength, getKeyValuePair } from '../utils/misc.js'
+import { getNrow, getKeyValuePair } from '../utils/misc.js'
 
 let mutate = function (data, ...mutateInstructions) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const newData = initNewData(data, mutateInstructions)
 
   const mutateColumnNames = getMutateColumnNames(mutateInstructions)
   const mutateFunctions = getMutateFunctions(mutateInstructions)
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     const row = {}
 
     for (const columnName in data) {

@@ -1,4 +1,4 @@
-export function getDataLength (data) {
+export function getNrow (data) {
   return data[Object.keys(data)[0]].length
 }
 
@@ -34,13 +34,13 @@ export function getId (data, rowNumber, columnNames) {
 }
 
 export function shallowCopy (data) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const newData = {}
 
   for (const columnName in data) {
     newData[columnName] = []
 
-    for (let i = 0; i < dataLength; i++) {
+    for (let i = 0; i < nrow; i++) {
       newData[columnName].push(data[columnName][i])
     }
   }

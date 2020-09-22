@@ -1,12 +1,11 @@
 import { curryTransformation } from './_curry.js'
-import { getDataLength } from '../utils/misc.js'
 
 let filter = function (data, condition) {
-  const dataLength = getDataLength(data)
+  const nrow = getNrow(data)
   const row = {}
   const newData = initNewData(data)
 
-  for (let i = 0; i < dataLength; i++) {
+  for (let i = 0; i < nrow; i++) {
     for (const columnName in data) {
       row[columnName] = data[columnName][i]
     }
@@ -34,3 +33,5 @@ export function initNewData (data) {
 
   return newData
 }
+
+function ()
