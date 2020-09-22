@@ -6,9 +6,6 @@ export {
   descendingStr
 } from './compare/index.js'
 
-// io
-export { toRowOriented } from './io/toRowOriented.js'
-
 // reducers
 export { count } from './reducers/count.js'
 export { max } from './reducers/max.js'

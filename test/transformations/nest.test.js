@@ -1,4 +1,5 @@
-import { nest, toRowOriented } from '../../src'
+import { nest } from '../../src'
+import { getNrow } from '../../src/utils/misc.js'
 
 const testData = {
   fruit: ['coconut', 'coconut', 'banana', 'banana', 'apple', 'apple', 'durian', 'durian'],
@@ -10,6 +11,24 @@ const moreElaborateTestData = {
   origin: ['brazil', 'brazil', 'uganda', 'uganda', 'brazil', 'brazil', 'uganda', 'uganda'],
   price: [5.2, 4.4, 5.1, 7.5, 3.8, 5.4, 3.3, 5.9]
 }
+
+function toRowOriented (columnOrientedData) {
+  const rowData = []
+  const nrow = getNrow(columnOrientedData)
+
+  for (let i = 0; i < nrow; i++) {
+    const row = {}
+
+    for (const columnName in columnOrientedData) {
+      row[columnName] = columnOrientedData[columnName][i]
+    }
+
+    rowData.push(row)
+  }
+
+  return rowData
+}
+
 
 describe('transformations: nest', () => {
   test('works without by', () => {

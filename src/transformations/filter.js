@@ -1,4 +1,5 @@
 import { curryTransformation } from './_curry.js'
+import { getNrow } from '../utils/misc.js'
 
 let filter = function (data, condition) {
   const nrow = getNrow(data)
