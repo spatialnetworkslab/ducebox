@@ -33,5 +33,3 @@ export function initNewData (data) {
 
   return newData
 }
-
-function ()
