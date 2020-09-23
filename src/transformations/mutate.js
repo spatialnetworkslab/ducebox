@@ -20,7 +20,7 @@ function createRowOperation (...mutateInstructions) {
   const mutateFunctions = getMutateFunctions(mutateInstructions)
 
   return function (row, i) {
-    for (let i = 0; i < mutateColumnNames.length; i++) {
+    for (let j = 0; j < mutateColumnNames.length; j++) {
       const columnName = mutateColumnNames[j]
       const mutateFunction = mutateFunctions[j]
 
