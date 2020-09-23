@@ -1,43 +1,35 @@
 import { curryTransformation } from './_curry.js'
-import { getNrow, getId } from '../utils/misc.js'
-import { initNewData, filter } from './filter.js'
+import { filter } from './filter.js'
 import { nest } from './nest.js'
+import { createSource, createSink } from '../io/columnOriented.js'
+import { keyMap } from '../utils/keyMap.js'
+import { transduce } from '../utils/transduce.js'
 
-let filterBy = function (data, getCondition, by = []) {
+let filterBy = function (data, getPredicate, by = []) {
   if (by.length === 0) {
-    return filter(getCondition(data))(data)
+    return filter(getPredicate(data))(data)
   }
 
-  const nestedData = nest('$nested', by)(data)
-  const nestedNrow = getNrow(nestedData)
+  const source = createSource(data)
+  const sink = createSink(source.columnNames())
 
-  const conditionPerGroup = {}
+  const rowOperation = createRowOperation(data, getPredicate, by)
 
-  for (let i = 0; i < nestedNrow; i++) {
-    const id = getId(nestedData, i, by)
-    conditionPerGroup[id] = getCondition(nestedData.$nested[i])
+  return transduce(source, rowOperation, sink)
+}
+
+function createRowOperation (data, getPredicate, by) {
+  const nestedDataSource = createSource(nest('$nested', by)(data))
+  const predicatePerGroup = keyMap(by)
+
+  nestedDataSource.forEachRow(row => {
+    predicatePerGroup.set(row, getPredicate(row.$nested))
+  })
+
+  return function (row, i) {
+    const predicate = predicatePerGroup.get(row)
+    return predicate(row, i) ? row : undefined
   }
-
-  const nrow = getNrow(data)
-  const row = {}
-  const newData = initNewData(data)
-
-  for (let i = 0; i < nrow; i++) {
-    const id = getId(data, i, by)
-    const condition = conditionPerGroup[id]
-
-    for (const columnName in data) {
-      row[columnName] = data[columnName][i]
-    }
-
-    if (condition(row, i)) {
-      for (const columnName in data) {
-        newData[columnName].push(row[columnName])
-      }
-    }
-  }
-
-  return newData
 }
 
 filterBy = curryTransformation(filterBy)

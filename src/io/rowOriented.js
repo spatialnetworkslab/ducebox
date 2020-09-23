@@ -1,27 +1,27 @@
-export function init () {
-  return []
-}
+export function createSource (data) {
+  return {
+    forEachRow (fn) {
+      for (let i = 0; i < data.length; i++) {
+        fn(data[i])
+      }
+    },
 
-export function forEachRow (data, fn) {
-  const nrow = getNrow(data)
-
-  for (let i = 0; i < nrow; i++) {
-    fn(data[i], i)
+    columnNames () {
+      return Object.keys(data[0])
+    }
   }
 }
 
-export function addRow (data, row) {
-  data.push(row)
-}
+export function createSink (columnNames) {
+  const newData = []
 
-export function prepareOutput (data) {
-  return data
-}
+  return {
+    addRow (row) {
+      newData.push(row)
+    },
 
-export function getColumnNames (data) {
-  return Object.keys(data[0])
-}
-
-function getNrow (data) {
-  return data.length
+    prepareOutput () {
+      return newData
+    }
+  }
 }

@@ -1,36 +1,23 @@
+import { createSource, createSink } from '../io/columnOriented.js'
+import { transduce } from '../utils/transduce.js'
 import { curryTransformation } from './_curry.js'
-import { getNrow } from '../utils/misc.js'
 
-let filter = function (data, condition) {
-  const nrow = getNrow(data)
-  const row = {}
-  const newData = initNewData(data)
+let filter = function (data, predicate) {
+  const source = createSource(data)
+  const sink = createSink(source.columnNames())
 
-  for (let i = 0; i < nrow; i++) {
-    for (const columnName in data) {
-      row[columnName] = data[columnName][i]
-    }
+  const rowOperation = createRowOperation(predicate)
 
-    if (condition(row, i)) {
-      for (const columnName in data) {
-        newData[columnName].push(row[columnName])
-      }
-    }
-  }
-
-  return newData
+  return transduce(source, rowOperation, sink)
 }
 
-filter = curryTransformation(filter)
+function createRowOperation (predicate) {
+  return (row, i) => predicate(row, i) ? row : undefined
+}
+
+filter = curryTransformation(filter, {
+  type: 'rowOperation',
+  createRowOperation
+})
 
 export { filter }
-
-export function initNewData (data) {
-  const newData = {}
-
-  for (const columnName in data) {
-    newData[columnName] = []
-  }
-
-  return newData
-}
