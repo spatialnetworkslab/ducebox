@@ -1,7 +1,7 @@
 import { curryTransformation } from './_curry.js'
 import { createSource, createSink } from '../io/columnOriented.js'
 import { getKeyValuePair } from '../utils/misc.js'
-import { transduce } from '../utils/transduce.js'
+import { transduce } from '../core/transduce.js'
 
 let mutate = function (data, ...mutateInstructions) {
   const source = createSource(data)
@@ -31,9 +31,19 @@ function createRowOperation (...mutateInstructions) {
   }
 }
 
+function deriveColumns (columnSet, ...mutateInstructions) {
+  for (const mutateInstruction of mutateInstructions) {
+    const { key: newColumnName } = getKeyValuePair(mutateInstruction)
+    columnSet.add(newColumnName)
+  }
+
+  return columnSet
+}
+
 mutate = curryTransformation(mutate, {
-  type: 'rowOperation',
-  createRowOperation
+  type: 'rowWise',
+  createRowOperation,
+  deriveColumns
 })
 
 export { mutate }

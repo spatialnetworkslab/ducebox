@@ -10,6 +10,26 @@ let select = function (data, ...selectionColumnNames) {
   return newData
 }
 
-select = curryTransformation(select)
+function createRowOperation (...selectionColumnNames) {
+  const selection = new Set(selectionColumnNames)
+
+  return function (row, i) {
+    for (const columnName in row) {
+      if (!selection.has(columnName)) {
+        delete row[columnName]
+      }
+    }
+  }
+}
+
+function deriveColumns (columnSet, ...selectionColumnNames) {
+  return new Set(selectionColumnNames)
+}
+
+select = curryTransformation(select, {
+  type: 'rowWise',
+  createRowOperation,
+  deriveColumns
+})
 
 export { select }

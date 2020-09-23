@@ -6,6 +6,10 @@ export {
   descendingStr
 } from './compare/index.js'
 
+// core
+export { optimize } from './core/optimize.js'
+export { pipe } from './core/pipe.js'
+
 // reducers
 export { count } from './reducers/count.js'
 export { max } from './reducers/max.js'

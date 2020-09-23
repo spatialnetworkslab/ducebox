@@ -1,4 +1,4 @@
-import { ARGS, FN_META } from '../symbols.js'
+import { ARGS, META } from '../symbols.js'
 
 export function curryTransformation (transformation, meta) {
   return function (...args) {
@@ -8,7 +8,7 @@ export function curryTransformation (transformation, meta) {
 
     fn[ARGS] = args
 
-    fn[FN_META] = {
+    fn[META] = {
       name: transformation.name,
       ...meta
     }
