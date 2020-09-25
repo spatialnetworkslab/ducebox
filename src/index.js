@@ -7,17 +7,16 @@ export {
 } from './compare/index.js'
 
 // core
-export { optimize } from './core/optimize.js'
-export { pipe } from './core/pipe.js'
+// TODO
 
-// reducers
-export { count } from './reducers/count.js'
-export { max } from './reducers/max.js'
-export { mean } from './reducers/mean.js'
-export { median } from './reducers/median.js'
-export { min } from './reducers/min.js'
-export { mode } from './reducers/mode.js'
-export { sum } from './reducers/sum.js'
+// summarizers
+export { count } from './summarizers/count.js'
+export { max } from './summarizers/max.js'
+export { mean } from './summarizers/mean.js'
+export { median } from './summarizers/median.js'
+export { min } from './summarizers/min.js'
+export { mode } from './summarizers/mode.js'
+export { sum } from './summarizers/sum.js'
 
 // transformations
 export { arrange } from './transformations/arrange.js'
