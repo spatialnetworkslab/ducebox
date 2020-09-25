@@ -3,7 +3,7 @@ import { filter } from './filter.js'
 import { nest } from './nest.js'
 import { createSource, createSink } from '../io/columnOriented.js'
 import { keyMap } from '../utils/keyMap.js'
-import { transduce } from '../utils/transduce.js'
+import { transduce } from '../core/transduce.js'
 
 let filterBy = function (data, getPredicate, by = []) {
   if (by.length === 0) {
