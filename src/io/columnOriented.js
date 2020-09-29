@@ -1,39 +1,66 @@
-export function createSource (data) {
-  return {
-    forEachRow (fn) {
-      const nrow = getNrow(data)
+import { _iterFnsMixin } from './_iterFns.js'
 
-      for (let i = 0; i < nrow; i++) {
-        const row = {}
-        for (const columnName in data) row[columnName] = data[columnName][i]
+class ColumnOrientedDataInterface {
+  constructor (data = {}) {
+    this._data = data
+    this._columnsInitialized = false
+  }
 
-        fn(row, i)
-      }
-    },
+  // Getters
+  getRow (index) {
+    const row = {}
 
-    columnNames () {
-      return Object.keys(data)
+    for (const columnName in this._data) {
+      row[columnName] = this._data[columnName][index]
+    }
+
+    return row
+  }
+
+  getNrow () {
+    return this._data[Object.keys(this._data)[0]].length
+  }
+
+  getColumn (columnName) {
+    return this._data[columnName]
+  }
+
+  getValue (columnName, index) {
+    return this._data[columnName][index]
+  }
+
+  // Setters
+  updateRow (row, index) {
+    for (const columnName in row) {
+      this._data[columnName][index] = row[columnName]
     }
   }
-}
 
-export function createSink (columnNames) {
-  const newData = {}
-  for (const columnName of columnNames) newData[columnName] = []
+  updateValue (value, columnName, index) {
+    this._data[columnName][index] = value
+  }
 
-  return {
-    addRow (row) {
+  addRow (row) {
+    if (!this._columnsInitialized) {
       for (const columnName in row) {
-        newData[columnName].push(row[columnName])
+        this._data[columnName] = []
       }
-    },
 
-    prepareOutput () {
-      return newData
+      this._columnsInitialized = true
     }
+
+    for (const columnName in row) {
+      this._data[columnName].push(row[columnName])
+    }
+  }
+
+  addColumn (column, columnName) {
+    this._data[columnName] = column
   }
 }
 
-export function getNrow (data) {
-  return data[Object.keys(data)[0]].length
+_iterFnsMixin(ColumnOrientedDataInterface)
+
+export function create (data) {
+  return new ColumnOrientedDataInterface(data)
 }

@@ -13,12 +13,18 @@ export function keyMap (keyColumns) {
   }
 
   return {
-    get (row) {
-      return map[getId(row)]
+    getId,
+
+    get (id) {
+      return map[id]
     },
 
-    set (row, value) {
-      map[getId(row)] = value
+    set (id, value) {
+      map[id] = value
+    },
+
+    has (id) {
+      return id in map
     }
   }
 }
