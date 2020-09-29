@@ -7,43 +7,43 @@ class RowOrientedDataInterface {
 
   // Getters
   getRow (index) {
-    return this.data[index]
+    return this._data[index]
   }
 
   getNrow () {
-    return this.data.length
+    return this._data.length
   }
 
   getColumn (columnName) {
     const column = []
 
-    for (let i = 0; i < this.data.length; i++) {
-      column.push(this.data[i][columnName])
+    for (let i = 0; i < this._data.length; i++) {
+      column.push(this._data[i][columnName])
     }
 
     return column
   }
 
   getValue (columnName, index) {
-    return this.data[index][columnName]
+    return this._data[index][columnName]
   }
 
   // Setters
   updateRow (row, index) {
-    this.data[index] = row
+    this._data[index] = row
   }
 
   updateValue (value, columnName, index) {
-    this.data[index][columnName] = value
+    this._data[index][columnName] = value
   }
 
   addRow (row) {
-    this.data.push(row)
+    this._data.push(row)
   }
 
   addColumn (column, columnName) {
-    for (let i = 0; i < this.data.length; i++) {
-      this.data[i][columnName] = column[i]
+    for (let i = 0; i < this._data.length; i++) {
+      this._data[i][columnName] = column[i]
     }
   }
 }

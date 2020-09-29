@@ -23,13 +23,14 @@ function createRowOperation (data, getPredicate, by) {
   const predicatePerGroup = keyMap(by)
 
   nestedDataSource.forEachRow(row => {
-    const id = predicatePerGroup.getId(row)
+    const id = predicatePerGroup.id(row)
     predicatePerGroup.set(id, getPredicate(row.$nested))
   })
 
   return function (row, i) {
-    const id = predicatePerGroup.getId(row)
+    const id = predicatePerGroup.id(row)
     const predicate = predicatePerGroup.get(id)
+
     return predicate(row, i) ? row : undefined
   }
 }
