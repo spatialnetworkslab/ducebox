@@ -7,7 +7,6 @@
     "@babel/preset-env": "^7.6.3",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
-    "dataframe-js": "^1.4.3",
     "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
@@ -15,9 +14,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^24.9.0",
-    "lazy.js": "^0.5.1",
-    "ramda": "^0.26.1",
-    "rollup": "^1.26.2"
+    "rollup": "^1.26.2",
+    "transducers.js": "^0.3.2"
   },
   "scripts": {
     "build": "rollup -c",
@@ -30,7 +28,8 @@
   "jest": {
     "verbose": true,
     "testPathIgnorePatterns": [
-      "/__data__/"
+      "/__data__/",
+      "/__test__"
     ]
   },
   "dependencies": {}
