@@ -1,63 +1,52 @@
-import { curryTransformation } from './_curry.js'
-import { createSource, createSink } from '../io/columnOriented.js'
-import { getKeyValuePair } from '../utils/misc.js'
-import { transduce } from '../core/transduce.js'
+import { map } from 'ramda'
 
-let mutate = function (data, ...mutateInstructions) {
-  const source = createSource(data)
-  const sink = createSink([
-    ...Object.keys(data),
-    ...getMutateColumnNames(mutateInstructions)]
-  )
+export function mutate (...args) {
+  const { data, mutateInstructions } = parseArgs(args)
+  const mapFn = constructMapFn(mutateInstructions)
 
-  const rowOperation = createRowOperation(...mutateInstructions)
+  if (data) {
+    return map(mapFn, data)
+  }
 
-  return transduce(source, rowOperation, sink)
+  return map(mapFn)
 }
 
-function createRowOperation (...mutateInstructions) {
-  const mutateColumnNames = getMutateColumnNames(mutateInstructions)
-  const mutateFunctions = getMutateFunctions(mutateInstructions)
+function parseArgs (args) {
+  const lastIndex = args.length - 1
 
-  return function (row, i) {
-    for (let j = 0; j < mutateColumnNames.length; j++) {
-      const columnName = mutateColumnNames[j]
-      const mutateFunction = mutateFunctions[j]
+  if (isMutateInstruction(args[lastIndex])) {
+    return { mutateInstructions: args }
+  }
 
-      row[columnName] = mutateFunction(row, i)
+  return {
+    data: args[lastIndex],
+    mutateInstructions: args.slice(1)
+  }
+}
+
+function isMutateInstruction (arg) {
+  const keys = Object.keys(arg)
+  const key = keys[0]
+
+  return (
+    arg.constructor === Object &&
+    keys.length === 1 &&
+    arg[key].constructor === Function
+  )
+}
+
+function constructMapFn (mutateInstructions) {
+  const parsedMutateInstructions = mutateInstructions.map(pair => {
+    const [columnName, mutateFn] = Object.entries(pair)[0]
+    return { columnName, mutateFn }
+  })
+
+  return function (row) {
+    for (let i = 0; i < parsedMutateInstructions.length; i++) {
+      const { columnName, mutateFn } = parsedMutateInstructions[i]
+      row[columnName] = mutateFn(row)
     }
 
     return row
   }
-}
-
-function deriveColumns (columnSet, ...mutateInstructions) {
-  for (const mutateInstruction of mutateInstructions) {
-    const { key: newColumnName } = getKeyValuePair(mutateInstruction)
-    columnSet.add(newColumnName)
-  }
-
-  return columnSet
-}
-
-mutate = curryTransformation(mutate, {
-  type: 'rowWise',
-  createRowOperation,
-  deriveColumns
-})
-
-export { mutate }
-
-export function getMutateColumnNames (mutateInstructions) {
-  return mutateInstructions.map(instruction => {
-    const { key: columnName } = getKeyValuePair(instruction)
-    return columnName
-  })
-}
-
-export function getMutateFunctions (mutateInstructions) {
-  return mutateInstructions.map(instruction => {
-    const { value: fn } = getKeyValuePair(instruction)
-    return fn
-  })
 }

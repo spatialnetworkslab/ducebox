@@ -1,66 +1,61 @@
-import { _iterFnsMixin } from './_iterFns.js'
+const init = '@@transducer/init'
+const result = '@@transducer/result'
+const step = '@@transducer/step'
 
-class ColumnOrientedDataInterface {
-  constructor (data = {}) {
-    this._data = data
-    this._columnsInitialized = false
-  }
+export function iterable (data) {
+  return {
+    * [Symbol.iterator] () {
+      const length = getLength(data)
 
-  // Getters
-  getRow (index) {
-    const row = {}
+      for (let i = 0; i < length; i++) {
+        const row = {}
 
-    for (const columnName in this._data) {
-      row[columnName] = this._data[columnName][index]
-    }
+        for (const columnName in data) {
+          row[columnName] = data[columnName][i]
+        }
 
-    return row
-  }
-
-  getNrow () {
-    return this._data[Object.keys(this._data)[0]].length
-  }
-
-  getColumn (columnName) {
-    return this._data[columnName]
-  }
-
-  getValue (columnName, index) {
-    return this._data[columnName][index]
-  }
-
-  // Setters
-  updateRow (row, index) {
-    for (const columnName in row) {
-      this._data[columnName][index] = row[columnName]
-    }
-  }
-
-  updateValue (value, columnName, index) {
-    this._data[columnName][index] = value
-  }
-
-  addRow (row) {
-    if (!this._columnsInitialized) {
-      for (const columnName in row) {
-        this._data[columnName] = []
+        yield row
       }
-
-      this._columnsInitialized = true
     }
-
-    for (const columnName in row) {
-      this._data[columnName].push(row[columnName])
-    }
-  }
-
-  addColumn (column, columnName) {
-    this._data[columnName] = column
   }
 }
 
-_iterFnsMixin(ColumnOrientedDataInterface)
+export function accumulator () {
+  return new Accumulator()
+}
 
-export function create (data) {
-  return new ColumnOrientedDataInterface(data)
+function getLength (data) {
+  return data[Object.keys(data)[0]].length
+}
+
+class Accumulator {
+  constructor () {
+    this[step] = this._initStep
+  }
+
+  _initStep (acc, row) {
+    for (const columnName in row) {
+      acc[columnName] = [row[columnName]]
+    }
+
+    this[step] = this._step
+
+    return acc
+  }
+
+  _step (acc, row) {
+    for (const columnName in row) {
+      acc[columnName].push(row[columnName])
+    }
+
+    return acc
+  }
+
+  [init] () {
+    return {}
+  }
+
+  [result] (acc) {
+    return acc
+  }
 }

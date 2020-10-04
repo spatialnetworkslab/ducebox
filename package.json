@@ -28,9 +28,10 @@
   "jest": {
     "verbose": true,
     "testPathIgnorePatterns": [
-      "/__data__/",
-      "/__test__"
+      "/__data__/"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "ramda": "^0.27.1"
+  }
 }
