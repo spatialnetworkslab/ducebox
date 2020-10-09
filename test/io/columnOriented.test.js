@@ -6,12 +6,13 @@ const rowData = [
   { fruit: 'banana', quantity: 5 },
   { fruit: 'coconut', quantity: 8 },
   { fruit: 'durian', quantity: 6 },
-  { fruit: 'elderberry', quantity: 7 }
+  { fruit: 'elderberry', quantity: 7 },
+  { fruit: 'fig', quantity: 11 }
 ]
 
 const colData = {
-  fruit: ['apple', 'banana', 'coconut', 'durian', 'elderberry'],
-  quantity: [10, 5, 8, 6, 7]
+  fruit: ['apple', 'banana', 'coconut', 'durian', 'elderberry', 'fig'],
+  quantity: [10, 5, 8, 6, 7, 11]
 }
 
 const notApple = row => row.fruit !== 'apple'
