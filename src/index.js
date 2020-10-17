@@ -1,3 +1,11 @@
+// compare functions
+export * from './compare/index.js'
+
+// io
 export * as columnOriented from './io/columnOriented.js'
 
-export { mutate } from './transformations/mutate.js'
+// summarizers
+// TODO
+
+// transformations
+// TODO
