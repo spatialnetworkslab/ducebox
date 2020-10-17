@@ -1,4 +1,4 @@
-import { curryN, compose, into, reduce } from 'ramda'
+import { curryN, into, reduce } from 'ramda'
 
 import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
@@ -75,7 +75,7 @@ const nest = curryN(4, _dispatchable([], _xnest,
   function (nestColName, nestAcc, by, list) {
     return into(
       [],
-      compose(nest(nestColName, nestAcc, by)),
+      nest(nestColName, nestAcc, by),
       list
     )
   }

@@ -1,4 +1,4 @@
-import { reduce, curryN, compose, into } from 'ramda'
+import { reduce, curryN, into } from 'ramda'
 
 import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
@@ -50,7 +50,7 @@ const unnest = curryN(3, _dispatchable([], _xunnest,
   function (nestColName, nestWrapper, list) {
     return into(
       [],
-      compose(unnest(nestColName, nestWrapper)),
+      unnest(nestColName, nestWrapper),
       list
     )
   }
