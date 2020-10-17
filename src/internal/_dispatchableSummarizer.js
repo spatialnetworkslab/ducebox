@@ -1,7 +1,18 @@
+import { REDUCIBLE } from '../symbols.js'
+
 export default function _dispatchableSummarizer (transducerCreator, fn) {
   return function (...args) {
-    return args[0] === undefined
-      ? transducerCreator()
-      : fn(args[0])
+    if (args[0] === undefined) {
+      return REDUCIBLE
+    }
+
+    if (args[0] && args[0].constructor === String) {
+      return {
+        column: args[0],
+        xf: transducerCreator()
+      }
+    }
+
+    return fn(...args)
   }
 }
