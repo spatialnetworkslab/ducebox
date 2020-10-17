@@ -1,9 +1,9 @@
-import _dispatchable from './internal/_dispatchable.js'
-import _xfBase from './internal/_xfBase.js'
-import _idFromCols from './internal/_idFromCols.js'
-import _stepCat from './internal/_stepCat.js'
-
 import { curryN, compose, into, reduce } from 'ramda'
+
+import _dispatchable from '../internal/_dispatchable.js'
+import _xfBase from '../internal/_xfBase.js'
+import _idFromCols from '../internal/_idFromCols.js'
+import _stepCat from '../internal/_stepCat.js'
 
 function XNest (nestColName, nestAcc, by, xf) {
   this.nestColName = nestColName

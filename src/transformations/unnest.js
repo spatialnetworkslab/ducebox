@@ -1,7 +1,7 @@
-import _dispatchable from './internal/_dispatchable.js'
-import _xfBase from './internal/_xfBase.js'
-
 import { reduce, curryN, compose, into } from 'ramda'
+
+import _dispatchable from '../internal/_dispatchable.js'
+import _xfBase from '../internal/_xfBase.js'
 
 function XUnnest (nestColName, nestWrapper, xf) {
   this.nestColName = nestColName

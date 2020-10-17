@@ -1,5 +1,6 @@
 // compare functions
-export * from './compare/index.js'
+// TODO fix this
+// export * from './compare/index.js'
 
 // core
 // TODO have own functions here

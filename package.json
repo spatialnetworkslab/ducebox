@@ -27,7 +27,8 @@
   "jest": {
     "verbose": true,
     "testPathIgnorePatterns": [
-      "/__data__/"
+      "/__data__/",
+      "/_transformations/"
     ]
   },
   "dependencies": {
