@@ -1,17 +1,13 @@
-var eq = require('./shared/eq');
-var R = require('../source');
+import { compose, filter, mutate, into } from '../../src/index.js'
 
 describe('mutate: standalone', () => {
   it('works', () => {
-    const input = [{ a: 10, b: 5 }, { a: 15, b: 3 }];
-    const expectedOutput = [{ a: 10, b: 5, c: 2 }, { a: 15, b: 3, c: 5 }];
+    const input = [{ a: 10, b: 5 }, { a: 15, b: 3 }]
+    const expectedOutput = [{ a: 10, b: 5, c: 2 }, { a: 15, b: 3, c: 5 }]
 
-    eq(
-      R.mutate({ c: ({ a, b }) => a / b }, input),
-      expectedOutput
-    );
-  });
-});
+    expect(mutate({ c: ({ a, b }) => a / b }, input)).toEqual(expectedOutput)
+  })
+})
 
 describe('mutate: transformer', () => {
   it('works', () => {
@@ -28,13 +24,13 @@ describe('mutate: transformer', () => {
       { c1: 'c', c2: 'b', c3: 10 },
       { c1: 'c', c2: 'a', c3: 11 },
       { c1: 'c', c2: 'b', c3: 12 }
-    ];
+    ]
 
-    const xf = R.compose(
-      R.filter(row => row.c1 !== 'c'),
-      R.mutate({ c3: row => row.c3 * 10 }),
-      R.filter(row => row.c3 > 10)
-    );
+    const xf = compose(
+      filter(row => row.c1 !== 'c'),
+      mutate({ c3: row => row.c3 * 10 }),
+      filter(row => row.c3 > 10)
+    )
 
     const expectedOutput = [
       { c1: 'a', c2: 'b', c3: 20 },
@@ -44,8 +40,8 @@ describe('mutate: transformer', () => {
       { c1: 'b', c2: 'b', c3: 60 },
       { c1: 'b', c2: 'a', c3: 70 },
       { c1: 'b', c2: 'b', c3: 80 }
-    ];
+    ]
 
-    eq(R.into([], xf, input), expectedOutput);
-  });
-});
+    expect(into([], xf, input)).toEqual(expectedOutput)
+  })
+})

@@ -1,20 +1,20 @@
-import map from './map.js';
+import { map } from 'ramda'
 
-export default function mutate(mutateInstructions, functor) {
-  const mapFn = getMapFn(mutateInstructions);
+export default function mutate (mutateInstructions, functor) {
+  const mutateFn = getMutateFn(mutateInstructions)
   return functor
-    ? map(mapFn, functor)
-    : map(mapFn);
+    ? map(mutateFn, functor)
+    : map(mutateFn)
 }
 
-function getMapFn(mutateInstructions) {
+function getMutateFn (mutateInstructions) {
   return row => {
-    const newRow = Object.assign({}, row);
+    const newRow = Object.assign({}, row)
 
     for (const newColumnName in mutateInstructions) {
-      newRow[newColumnName] = mutateInstructions[newColumnName](newRow);
+      newRow[newColumnName] = mutateInstructions[newColumnName](newRow)
     }
 
-    return newRow;
-  };
+    return newRow
+  }
 }
