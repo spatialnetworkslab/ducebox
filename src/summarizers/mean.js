@@ -1,22 +1,23 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
-import { sum } from './sum.js'
+import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
+import { reduce } from 'ramda'
 
-let mean = function (array) {
-  const total = sum(array)
-  return total / array.length
+const init = () => ({ count: 0, sum: 0 })
+const result = result => result.sum / result.count
+const step = (acc, val) => {
+  acc.count++
+  acc.sum += val
+
+  return acc
 }
 
-const foldableMean = {
-  startValue: 0,
-  fold (currentValue, previousValue) {
-    return previousValue + currentValue
-  },
-  finally (value, length) {
-    return value / length
-  }
-}
+const _xmean = () => ({
+  '@@transducer/init': init,
+  '@@transducer/result': result,
+  '@@transducer/step': step
+})
 
-mean = enableColumnNameSyntax(mean)
-mean = attachFoldableVersion(mean, foldableMean)
+const mean = _dispatchableSummarizer(_xmean, function (input) {
+  return result(reduce(step, init(), input))
+})
 
-export { mean }
+export default mean

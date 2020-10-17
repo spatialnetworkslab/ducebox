@@ -1,65 +1,14 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
+import { reduce } from '../index.js'
+import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
 
-let mode = function (array) {
-  const occurrences = getOccurrences(array)
-  return findElementWithMostOccurrences(occurrences)
-}
+const init = () => ({})
 
-export const foldableMode = {
-  startValue: {},
-  fold (currentValue, previousValue) {
-    if (currentValue in previousValue) {
-      previousValue[currentValue]++
-    } else {
-      previousValue[currentValue] = 1
-    }
-
-    return previousValue
-  },
-  finally (value, length) {
-    let maxCount = 0
-    let maxElement
-
-    for (const element in value) {
-      const count = value[element]
-
-      if (maxCount < count) {
-        maxCount = count
-        maxElement = element
-      }
-    }
-
-    return parseInt(maxElement)
-  }
-}
-
-mode = enableColumnNameSyntax(mode)
-mode = attachFoldableVersion(mode, foldableMode)
-
-export { mode }
-
-function getOccurrences (array) {
-  const occurrences = {}
-
-  for (let i = 0; i < array.length; i++) {
-    const element = array[i]
-
-    if (element in occurrences) {
-      occurrences[element]++
-    } else {
-      occurrences[element] = 1
-    }
-  }
-
-  return occurrences
-}
-
-function findElementWithMostOccurrences (occurrences) {
+const result = acc => {
   let maxCount = 0
   let maxElement
 
-  for (const element in occurrences) {
-    const count = occurrences[element]
+  for (const element in acc) {
+    const count = acc[element]
 
     if (maxCount < count) {
       maxCount = count
@@ -69,3 +18,25 @@ function findElementWithMostOccurrences (occurrences) {
 
   return parseInt(maxElement)
 }
+
+const step = (acc, val) => {
+  if (val in acc) {
+    acc[val]++
+  } else {
+    acc[val] = 1
+  }
+
+  return acc
+}
+
+const _xmode = () => ({
+  '@@transducer/init': init,
+  '@@transducer/result': result,
+  '@@transducer/step': step
+})
+
+const mode = _dispatchableSummarizer(_xmode, function (input) {
+  return result(reduce(step, init(), input))
+})
+
+export default mode

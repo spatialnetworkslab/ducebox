@@ -1,22 +1,19 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
+import { identity } from 'ramda'
+import { reduce } from '../index.js'
+import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
 
-let max = function (array) {
-  return Math.max(...array)
-}
+const init = () => -Infinity
+const result = identity
+const step = (acc, val) => acc < val ? val : acc
 
-const foldableMax = {
-  startValue: -Infinity,
-  fold (currentValue, previousValue) {
-    return currentValue > previousValue
-      ? currentValue
-      : previousValue
-  },
-  finally (value, length) {
-    return value
-  }
-}
+const _xmax = () => ({
+  '@@transducer/init': init,
+  '@@transducer/result': result,
+  '@@transducer/step': step
+})
 
-max = enableColumnNameSyntax(max)
-max = attachFoldableVersion(max, foldableMax)
+const max = _dispatchableSummarizer(_xmax, function (input) {
+  return result(reduce(step, init(), input))
+})
 
-export { max }
+export default max

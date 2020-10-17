@@ -1,20 +1,22 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
+import { identity } from 'ramda'
+import { reduce } from '../index.js'
+import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
+import _isArrayLike from '../internal/_isArrayLike.js'
 
-let count = function (array) {
-  return array.length
-}
+const init = () => 0
+const result = identity
+const step = acc => acc + 1
 
-const foldableCount = {
-  startValue: -1,
-  fold (currentValue, previousValue) {
-    return previousValue + 1
-  },
-  finally (value, length) {
-    return value
-  }
-}
+const _xcount = () => ({
+  '@@transducer/init': init,
+  '@@transducer/result': result,
+  '@@transducer/step': step
+})
 
-count = enableColumnNameSyntax(count)
-count = attachFoldableVersion(count, foldableCount)
+const count = _dispatchableSummarizer(_xcount, function count (input) {
+  return _isArrayLike(input)
+    ? input.length
+    : result(reduce(step, init(), input))
+})
 
-export { count }
+export default count

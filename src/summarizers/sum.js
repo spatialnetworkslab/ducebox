@@ -1,26 +1,46 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
+import { identity } from 'ramda'
+import { reduce } from '../index.js'
+import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
 
-let sum = function (array) {
-  let total = 0
+const init = () => 0
+const result = identity
+const step = (acc, val) => acc + val
 
-  for (let i = 0; i < array.length; i++) {
-    total += array[i]
-  }
+const _xsum = () => ({
+  '@@transducer/init': init,
+  '@@transducer/result': result,
+  '@@transducer/step': step
+})
 
-  return total
-}
+const sum = _dispatchableSummarizer(_xsum, function (input) {
+  return result(reduce(step, init(), input))
+})
 
-const foldableSum = {
-  startValue: 0,
-  fold (currentValue, previousValue) {
-    return previousValue + currentValue
-  },
-  finally (value, length) {
-    return value
-  }
-}
+export default sum
 
-sum = enableColumnNameSyntax(sum)
-sum = attachFoldableVersion(sum, foldableSum)
+// import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
 
-export { sum }
+// let sum = function (array) {
+//   let total = 0
+
+//   for (let i = 0; i < array.length; i++) {
+//     total += array[i]
+//   }
+
+//   return total
+// }
+
+// const foldableSum = {
+//   startValue: 0,
+//   fold (currentValue, previousValue) {
+//     return previousValue + currentValue
+//   },
+//   finally (value, length) {
+//     return value
+//   }
+// }
+
+// sum = enableColumnNameSyntax(sum)
+// sum = attachFoldableVersion(sum, foldableSum)
+
+// export { sum }

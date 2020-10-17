@@ -1,22 +1,19 @@
-import { enableColumnNameSyntax, attachFoldableVersion } from './_curry.js'
+import { identity } from 'ramda'
+import { reduce } from '../index.js'
+import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
 
-let min = function (array) {
-  return Math.min(...array)
-}
+const init = () => Infinity
+const result = identity
+const step = (acc, val) => acc < val ? acc : val
 
-const foldableMin = {
-  startValue: Infinity,
-  fold (currentValue, previousValue) {
-    return currentValue < previousValue
-      ? currentValue
-      : previousValue
-  },
-  finally (value, length) {
-    return value
-  }
-}
+const _xmin = () => ({
+  '@@transducer/init': init,
+  '@@transducer/result': result,
+  '@@transducer/step': step
+})
 
-min = enableColumnNameSyntax(min)
-min = attachFoldableVersion(min, foldableMin)
+const min = _dispatchableSummarizer(_xmin, function (input) {
+  return result(reduce(step, init(), input))
+})
 
-export { min }
+export default min
