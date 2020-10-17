@@ -1,21 +1,19 @@
-import _dispatchable from './internal/_dispatchable.js';
-import _xfBase from './internal/_xfBase.js';
-import reduce from './reduce.js';
-import curryN from './curryN.js';
-import compose from './compose.js';
-import into from './into.js';
+import _dispatchable from './internal/_dispatchable.js'
+import _xfBase from './internal/_xfBase.js'
 
-function XDenest(nestColName, nestWrapper, xf) {
-  this.nestColName = nestColName;
-  this.nestWrapper = nestWrapper;
-  this.xf = xf;
-  this.outerColumns = [];
+import { reduce, curryN, compose, into } from 'ramda'
 
-  this['@@transducer/step'] = this._initStep;
+function XDenest (nestColName, nestWrapper, xf) {
+  this.nestColName = nestColName
+  this.nestWrapper = nestWrapper
+  this.xf = xf
+  this.outerColumns = []
+
+  this['@@transducer/step'] = this._initStep
 }
 
-XDenest.prototype['@@transducer/init'] = _xfBase.init;
-XDenest.prototype['@@transducer/result'] = _xfBase.result;
+XDenest.prototype['@@transducer/init'] = _xfBase.init
+XDenest.prototype['@@transducer/result'] = _xfBase.result
 
 XDenest.prototype._initStep = function(result, input) {
   for (const columnName in input) {
