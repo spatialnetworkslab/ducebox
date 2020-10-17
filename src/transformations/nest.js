@@ -10,6 +10,7 @@ function XNest (nestColName, nestAcc, by, xf) {
   this.nestAcc = _stepCat(nestAcc)
   this.by = by
   this.xf = xf
+
   this.nestedColumns = []
   this.inputs = {}
 
@@ -17,6 +18,7 @@ function XNest (nestColName, nestAcc, by, xf) {
 }
 
 XNest.prototype['@@transducer/init'] = _xfBase.init
+
 XNest.prototype['@@transducer/result'] = function () {
   const final = this.xf['@@transducer/result'](reduce(
     (result, key) => this.xf['@@transducer/step'](result, this.inputs[key]),
@@ -65,11 +67,11 @@ XNest.prototype._step = function (result, input) {
   return result
 }
 
-var _xnest = curryN(4, function _xnest (nestColName, nestAcc, by, xf) {
+const _xnest = curryN(4, function _xnest (nestColName, nestAcc, by, xf) {
   return new XNest(nestColName, nestAcc, by, xf)
 })
 
-var nest = curryN(4, _dispatchable([], _xnest,
+const nest = curryN(4, _dispatchable([], _xnest,
   function (nestColName, nestAcc, by, list) {
     return into(
       [],

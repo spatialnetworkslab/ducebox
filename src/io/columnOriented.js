@@ -1,6 +1,4 @@
-const init = '@@transducer/init'
-const result = '@@transducer/result'
-const step = '@@transducer/step'
+import { identity } from 'ramda'
 
 export function iterable (data) {
   return {
@@ -21,41 +19,34 @@ export function iterable (data) {
 }
 
 export function accumulator () {
-  return new Accumulator()
+  return new ColumnOrientedAccumulator()
 }
 
 function getLength (data) {
   return data[Object.keys(data)[0]].length
 }
 
-class Accumulator {
-  constructor () {
-    this[step] = this._initStep
+function ColumnOrientedAccumulator () {
+  this['@@transducer/step'] = this._initStep
+}
+
+ColumnOrientedAccumulator.prototype['@@transducer/init'] = () => ({})
+ColumnOrientedAccumulator.prototype['@@transducer/result'] = identity
+
+ColumnOrientedAccumulator.prototype._initStep = function (acc, row) {
+  for (const columnName in row) {
+    acc[columnName] = [row[columnName]]
   }
 
-  _initStep (acc, row) {
-    for (const columnName in row) {
-      acc[columnName] = [row[columnName]]
-    }
+  this['@@transducer/step'] = this._step
 
-    this[step] = this._step
+  return acc
+}
 
-    return acc
+ColumnOrientedAccumulator.prototype._step = function (acc, row) {
+  for (const columnName in row) {
+    acc[columnName].push(row[columnName])
   }
 
-  _step (acc, row) {
-    for (const columnName in row) {
-      acc[columnName].push(row[columnName])
-    }
-
-    return acc
-  }
-
-  [init] () {
-    return {}
-  }
-
-  [result] (acc) {
-    return acc
-  }
+  return acc
 }

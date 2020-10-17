@@ -42,11 +42,11 @@ XUnnest.prototype._step = function (outerResult, outerInput) {
   )
 }
 
-var _xunnest = curryN(3, function _xunnest (nestColName, nestWrapper, xf) {
+const _xunnest = curryN(3, function _xunnest (nestColName, nestWrapper, xf) {
   return new XUnnest(nestColName, nestWrapper, xf)
 })
 
-var unnest = curryN(3, _dispatchable([], _xunnest,
+const unnest = curryN(3, _dispatchable([], _xunnest,
   function (nestColName, nestWrapper, list) {
     return into(
       [],
