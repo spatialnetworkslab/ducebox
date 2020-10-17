@@ -15,7 +15,13 @@ export {
 export * as columnOriented from './io/columnOriented.js'
 
 // summarizers
-// TODO
+export { default as count } from './summarizers/count.js'
+export { default as max } from './summarizers/max.js'
+export { default as mean } from './summarizers/mean.js'
+export { default as median } from './summarizers/median.js'
+export { default as min } from './summarizers/min.js'
+export { default as mode } from './summarizers/mode.js'
+export { default as sum } from './summarizers/sum.js'
 
 // transformations
 export { filter } from 'ramda'
