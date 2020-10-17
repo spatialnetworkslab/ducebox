@@ -12,8 +12,8 @@ const _xsum = () => ({
   '@@transducer/step': step
 })
 
-const sum = _dispatchableSummarizer(_xsum, function (input) {
-  return result(reduce(step, init(), input))
+const sum = _dispatchableSummarizer(_xsum, function (list) {
+  return result(reduce(step, init(), list))
 })
 
 export default sum

@@ -12,8 +12,8 @@ const _xmax = () => ({
   '@@transducer/step': step
 })
 
-const max = _dispatchableSummarizer(_xmax, function (input) {
-  return result(reduce(step, init(), input))
+const max = _dispatchableSummarizer(_xmax, function (list) {
+  return result(reduce(step, init(), list))
 })
 
 export default max

@@ -35,8 +35,8 @@ const _xmode = () => ({
   '@@transducer/step': step
 })
 
-const mode = _dispatchableSummarizer(_xmode, function (input) {
-  return result(reduce(step, init(), input))
+const mode = _dispatchableSummarizer(_xmode, function (list) {
+  return result(reduce(step, init(), list))
 })
 
 export default mode

@@ -12,8 +12,8 @@ const _xmin = () => ({
   '@@transducer/step': step
 })
 
-const min = _dispatchableSummarizer(_xmin, function (input) {
-  return result(reduce(step, init(), input))
+const min = _dispatchableSummarizer(_xmin, function (list) {
+  return result(reduce(step, init(), list))
 })
 
 export default min

@@ -13,10 +13,10 @@ const _xcount = () => ({
   '@@transducer/step': step
 })
 
-const count = _dispatchableSummarizer(_xcount, function count (input) {
-  return _isArrayLike(input)
-    ? input.length
-    : result(reduce(step, init(), input))
+const count = _dispatchableSummarizer(_xcount, function count (list) {
+  return _isArrayLike(list)
+    ? list.length
+    : result(reduce(step, init(), list))
 })
 
 export default count

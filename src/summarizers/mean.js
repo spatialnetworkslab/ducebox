@@ -16,8 +16,8 @@ const _xmean = () => ({
   '@@transducer/step': step
 })
 
-const mean = _dispatchableSummarizer(_xmean, function (input) {
-  return result(reduce(step, init(), input))
+const mean = _dispatchableSummarizer(_xmean, function (list) {
+  return result(reduce(step, init(), list))
 })
 
 export default mean
