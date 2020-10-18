@@ -3,6 +3,22 @@ import { reduce, curryN, into } from 'ramda'
 import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
 
+const _xunnest = curryN(3, function _xunnest (nestColName, nestWrapper, xf) {
+  return new XUnnest(nestColName, nestWrapper, xf)
+})
+
+const unnest = curryN(3, _dispatchable([], _xunnest,
+  function (nestColName, nestWrapper, df) {
+    return into(
+      [],
+      unnest(nestColName, nestWrapper),
+      df
+    )
+  }
+))
+
+export default unnest
+
 function XUnnest (nestColName, nestWrapper, xf) {
   this.nestColName = nestColName
   this.nestWrapper = nestWrapper
@@ -41,22 +57,6 @@ XUnnest.prototype._step = function (acc, row) {
     this.nestWrapper(nestedData)
   )
 }
-
-const _xunnest = curryN(3, function _xunnest (nestColName, nestWrapper, xf) {
-  return new XUnnest(nestColName, nestWrapper, xf)
-})
-
-const unnest = curryN(3, _dispatchable([], _xunnest,
-  function (nestColName, nestWrapper, df) {
-    return into(
-      [],
-      unnest(nestColName, nestWrapper),
-      df
-    )
-  }
-))
-
-export default unnest
 
 function _attach (innerRow, outerRow) {
   const newRow = Object.assign({}, innerRow)
