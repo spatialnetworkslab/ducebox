@@ -1,22 +1,62 @@
+import { reduce } from '../index.js'
 import _idFromCols from './_idFromCols.js'
 import _xfBase from './_xfBase.js'
+
+const _xsummarisebyReducable = (f, by, xf) => new XSummariseByReducable(f, by, xf)
+
+export default _xsummarisebyReducable
 
 function XSummariseByReducable (f, by, xf) {
   this.instructions = _getReducableInstructions(f)
   this.by = by
   this.xf = xf
 
-  this.acc = {}
+  this.summarizedDataById = {}
 }
 
 XSummariseByReducable.prototype['@@transducer/init'] = _xfBase.init
 
-XSummariseByReducable.prototype['@@transducer/result'] = result => {
+XSummariseByReducable.prototype['@@transducer/result'] = function () {
+  const result = this.xf['@@transducer/result'](reduce(
+    this.finalStep.bind(this),
+    this.xf['@@transducer/init'](),
+    Object.values(this.summarizedDataById)
+  ))
 
+  this.summarizedDataById = null
+
+  return result
 }
 
-XSummariseByReducable.prototype['@@transducer/step'] = (result, input) => {
-  const id = _idFromCols(input, this.by)
+XSummariseByReducable.prototype['@@transducer/step'] = function (acc, row) {
+  const id = _idFromCols(row, this.by)
+  const newId = !(id in this.summarizedDataById)
+
+  if (newId) {
+    this.summarizedDataById[id] = _initSummaryGroup(
+      this.instructions,
+      row,
+      this.by
+    )
+  }
+
+  this.summarizedDataById[id] = _updateSummaryGroup(
+    this.summarizedDataById[id],
+    this.instructions,
+    row
+  )
+
+  return acc
+}
+
+XSummariseByReducable.prototype.finalStep = function (acc, row) {
+  for (const newColumnName in this.instructions) {
+    row[newColumnName] = this
+      .instructions[newColumnName]
+      .xf['@@transducer/result'](row[newColumnName])
+  }
+
+  return this.xf['@@transducer/step'](acc, row)
 }
 
 function _getReducableInstructions (f) {
@@ -24,17 +64,31 @@ function _getReducableInstructions (f) {
   return f(columnProxy)
 }
 
-function _initSummaryGroup (instructions) {
-  const acc = {}
+function _initSummaryGroup (instructions, row, by) {
+  const summaryGroup = {}
 
-  for (const newColumn in instructions) {
-    const instruction = instructions[newColumn]
-    acc[newColumn] = instruction.xf['@@transducer/init']
+  for (const newColumnName in instructions) {
+    const instruction = instructions[newColumnName]
+    summaryGroup[newColumnName] = instruction.xf['@@transducer/init']()
   }
 
-  return acc
+  for (let i = 0; i < by.length; i++) {
+    const byCol = by[i]
+    summaryGroup[byCol] = row[byCol]
+  }
+
+  return summaryGroup
 }
 
-function _stepSummaryGroup (summaryGroup, instructions) {
+function _updateSummaryGroup (summaryGroup, instructions, row) {
+  for (const newColumnName in instructions) {
+    const instruction = instructions[newColumnName]
 
+    summaryGroup[newColumnName] = instruction.xf['@@transducer/step'](
+      summaryGroup[newColumnName],
+      row[instruction.column]
+    )
+  }
+
+  return summaryGroup
 }

@@ -8,10 +8,10 @@ function XSummariseByIrreducable (f, by, xf) {
 
 XSummariseByIrreducable.prototype['@@transducer/init'] = _xfBase.init
 
-XSummariseByIrreducable.prototype['@@transducer/result'] = result => {
+XSummariseByIrreducable.prototype['@@transducer/result'] = function (result) {
 
 }
 
-XSummariseByIrreducable.prototype['@@transducer/step'] = (acc, row) => {
+XSummariseByIrreducable.prototype['@@transducer/step'] = function (acc, row) {
 
 }

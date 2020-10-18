@@ -1,5 +1,6 @@
-import { curryN, into, reduce } from 'ramda'
+import { curryN } from 'ramda'
 
+import { into, reduce } from '../index.js'
 import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
 import _idFromCols from '../internal/_idFromCols.js'
@@ -20,14 +21,15 @@ function XNestBy (nestColName, nestAcc, by, xf) {
 XNestBy.prototype['@@transducer/init'] = _xfBase.init
 
 XNestBy.prototype['@@transducer/result'] = function () {
-  const final = this.xf['@@transducer/result'](reduce(
-    (acc, id) => this.xf['@@transducer/step'](acc, this.nestedDataById[id]),
+  const result = this.xf['@@transducer/result'](reduce(
+    this.xf['@@transducer/step'].bind(this.xf),
     this.xf['@@transducer/init'](),
-    Object.keys(this.nestedDataById)
+    Object.values(this.nestedDataById)
   ))
 
-  this.inputs = null
-  return final
+  this.nestedDataById = null
+
+  return result
 }
 
 XNestBy.prototype._initStep = function (acc, row) {
@@ -48,15 +50,12 @@ XNestBy.prototype._step = function (acc, row) {
   const newId = !(id in this.nestedDataById)
 
   if (newId) {
-    const outerRow = {}
-
-    for (let i = 0; i < this.by.length; i++) {
-      const colName = this.by[i]
-      outerRow[colName] = row[colName]
-    }
-
-    outerRow[this.nestColName] = this.nestAcc['@@transducer/init']()
-    this.nestedDataById[id] = outerRow
+    this.nestedDataById[id] = _initNestedGroup(
+      row,
+      this.nestColName,
+      this.by,
+      this.nestAcc['@@transducer/init']()
+    )
   }
 
   this.nestedDataById[id][this.nestColName] = this.nestAcc['@@transducer/step'](
@@ -82,6 +81,19 @@ const nestBy = curryN(4, _dispatchable([], _xnestBy,
 ))
 
 export default nestBy
+
+function _initNestedGroup (row, nestColName, by, initVal) {
+  const nestedGroup = {}
+
+  for (let i = 0; i < by.length; i++) {
+    const colName = by[i]
+    nestedGroup[colName] = row[colName]
+  }
+
+  nestedGroup[nestColName] = initVal
+
+  return nestedGroup
+}
 
 function _select (row, columnNames) {
   const newRow = {}
