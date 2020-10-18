@@ -12,9 +12,11 @@ function XSummariseByIrreducable (f, by, xf) {
   this.xf = xf
 
   this.nestColName = Symbol('nested')
-  this.nestAcc = accumulator()
+  this.getAccumulator = accumulator
+
   this.nestedColumns = []
   this.nestedDataById = {}
+  this.accumulatorById = {}
 
   this['@@transducer/step'] = this._initStep
 }
@@ -23,8 +25,7 @@ XSummariseByIrreducable.prototype['@@transducer/init'] = _xfBase.init
 XSummariseByIrreducable.prototype['@@transducer/result'] = _result
 XSummariseByIrreducable.prototype._initStep = _initStep
 XSummariseByIrreducable.prototype._step = _step
-
-XSummariseByIrreducable.prototype.finalStep = function (row) {
+XSummariseByIrreducable.prototype._finalStep = function (acc, row) {
   const summarizedRow = this.f(row[this.nestColName])
 
   for (let i = 0; i < this.by.length; i++) {
@@ -32,5 +33,5 @@ XSummariseByIrreducable.prototype.finalStep = function (row) {
     summarizedRow[byCol] = row[byCol]
   }
 
-  return this.xf['@@transducer/step'](summarizedRow)
+  return this.xf['@@transducer/step'](acc, summarizedRow)
 }

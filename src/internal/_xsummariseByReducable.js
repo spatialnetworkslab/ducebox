@@ -18,7 +18,7 @@ XSummariseByReducable.prototype['@@transducer/init'] = _xfBase.init
 
 XSummariseByReducable.prototype['@@transducer/result'] = function () {
   const result = this.xf['@@transducer/result'](reduce(
-    this.finalStep.bind(this),
+    this._finalStep.bind(this),
     this.xf['@@transducer/init'](),
     Object.values(this.summarizedDataById)
   ))
@@ -49,7 +49,7 @@ XSummariseByReducable.prototype['@@transducer/step'] = function (acc, row) {
   return acc
 }
 
-XSummariseByReducable.prototype.finalStep = function (acc, row) {
+XSummariseByReducable.prototype._finalStep = function (acc, row) {
   for (const newColumnName in this.instructions) {
     row[newColumnName] = this
       .instructions[newColumnName]

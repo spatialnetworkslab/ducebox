@@ -1,4 +1,4 @@
-import { compose, nestBy, mutate, filter, into } from '../../src/index.js'
+import { compose, nestBy, mutate, filter, into, columnOriented } from '../../src/index.js'
 
 const input = [
   { c1: 'a', c2: 'a', c3: 10 },
@@ -26,7 +26,27 @@ describe('nestBy: standalone', () => {
       { c1: 'c', c2: 'b', nested: [{ c3: 100 }, { c3: 120 }] }
     ]
 
-    expect(nestBy('nested', [], ['c1', 'c2'], input)).toEqual(expectedOutput)
+    expect(nestBy('nested', ['c1', 'c2'], input)).toEqual(expectedOutput)
+  })
+
+  it('works with custom accumulator', () => {
+    const expectedOutput = [
+      { c1: 'a', c2: 'a', nested: { c3: [10, 30] } },
+      { c1: 'a', c2: 'b', nested: { c3: [20, 40] } },
+      { c1: 'b', c2: 'a', nested: { c3: [50, 70] } },
+      { c1: 'b', c2: 'b', nested: { c3: [60, 80] } },
+      { c1: 'c', c2: 'a', nested: { c3: [90, 110] } },
+      { c1: 'c', c2: 'b', nested: { c3: [100, 120] } }
+    ]
+
+    const nestInstructions = {
+      column: 'nested',
+      getAccumulator: columnOriented.accumulator
+    }
+
+    const output = nestBy(nestInstructions, ['c1', 'c2'], input)
+
+    expect(output).toEqual(expectedOutput)
   })
 })
 
@@ -35,7 +55,7 @@ describe('nestBy: transformer', () => {
     const xf = compose(
       mutate({ c3: row => row.c3 / 10 }),
       filter(row => row.c1 !== 'c'),
-      nestBy('nested', [], ['c1', 'c2'])
+      nestBy('nested', ['c1', 'c2'])
     )
 
     const output = into([], xf, input)
@@ -54,7 +74,7 @@ describe('nestBy: transformer', () => {
     const xf = compose(
       mutate({ c3: row => row.c3 / 10 }),
       filter(row => row.c1 !== 'c'),
-      nestBy('nested', [], ['c1', 'c2']),
+      nestBy('nested', ['c1', 'c2']),
       filter(row => row.c1 === 'a')
     )
 
@@ -72,7 +92,7 @@ describe('nestBy: transformer', () => {
     const xf = compose(
       mutate({ c3: row => row.c3 / 10 }),
       filter(row => row.c1 !== 'c'),
-      nestBy('nested', [], ['c1', 'c2']),
+      nestBy('nested', ['c1', 'c2']),
       mutate({ c2: row => row.c2 + 'x' })
     )
 

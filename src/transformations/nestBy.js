@@ -6,16 +6,59 @@ import _xfBase from '../internal/_xfBase.js'
 import _idFromCols from '../internal/_idFromCols.js'
 import _stepCat from '../internal/_stepCat.js'
 
-function XNestBy (nestColName, nestAcc, by, xf) {
-  this.nestColName = nestColName
-  this.nestAcc = _stepCat(nestAcc)
+const _xnestBy = curryN(3, function _xnestBy (nestInstructions, by, xf) {
+  return new XNestBy(nestInstructions, by, xf)
+})
+
+const nestBy = curryN(3, _dispatchable([], _xnestBy,
+  function (nestInstructions, by, df) {
+    return into(
+      [],
+      nestBy(nestInstructions, by),
+      df
+    )
+  }
+))
+
+export default nestBy
+
+function XNestBy (nestInstructions, by, xf) {
+  const nestInstructionsIsObj = nestInstructions.constructor === Object
+
+  this.nestColName = nestInstructionsIsObj
+    ? nestInstructions.column
+    : nestInstructions
+
+  this.getAccumulator = nestInstructionsIsObj && nestInstructions.getAccumulator
+    ? nestInstructions.getAccumulator
+    : () => []
+
   this.by = by
   this.xf = xf
 
   this.nestedColumns = []
   this.nestedDataById = {}
+  this.accumulatorById = {}
 
   this['@@transducer/step'] = this._initStep
+}
+
+XNestBy.prototype['@@transducer/init'] = _xfBase.init
+XNestBy.prototype['@@transducer/result'] = _result
+XNestBy.prototype._initStep = _initStep
+XNestBy.prototype._step = _step
+XNestBy.prototype._finalStep = _finalStep
+
+export function _result () {
+  const result = this.xf['@@transducer/result'](reduce(
+    this._finalStep.bind(this),
+    this.xf['@@transducer/init'](),
+    Object.values(this.nestedDataById)
+  ))
+
+  this.nestedDataById = null
+
+  return result
 }
 
 export function _initStep (acc, row) {
@@ -36,15 +79,17 @@ export function _step (acc, row) {
   const newId = !(id in this.nestedDataById)
 
   if (newId) {
+    this.accumulatorById[id] = _stepCat(this.getAccumulator())
+
     this.nestedDataById[id] = _initNestedGroup(
       row,
       this.nestColName,
       this.by,
-      this.nestAcc['@@transducer/init']()
+      this.accumulatorById[id]['@@transducer/init']()
     )
   }
 
-  this.nestedDataById[id][this.nestColName] = this.nestAcc['@@transducer/step'](
+  this.nestedDataById[id][this.nestColName] = this.accumulatorById[id]['@@transducer/step'](
     this.nestedDataById[id][this.nestColName],
     _select(row, this.nestedColumns)
   )
@@ -52,38 +97,9 @@ export function _step (acc, row) {
   return acc
 }
 
-export function _result () {
-  const result = this.xf['@@transducer/result'](reduce(
-    this.xf['@@transducer/step'].bind(this.xf),
-    this.xf['@@transducer/init'](),
-    Object.values(this.nestedDataById)
-  ))
-
-  this.nestedDataById = null
-
-  return result
+function _finalStep (acc, row) {
+  return this.xf['@@transducer/step'](acc, row)
 }
-
-XNestBy.prototype['@@transducer/init'] = _xfBase.init
-XNestBy.prototype['@@transducer/result'] = _result
-XNestBy.prototype._initStep = _initStep
-XNestBy.prototype._step = _step
-
-const _xnestBy = curryN(4, function _xnestBy (nestColName, nestAcc, by, xf) {
-  return new XNestBy(nestColName, nestAcc, by, xf)
-})
-
-const nestBy = curryN(4, _dispatchable([], _xnestBy,
-  function (nestColName, nestAcc, by, df) {
-    return into(
-      [],
-      nestBy(nestColName, nestAcc, by),
-      df
-    )
-  }
-))
-
-export default nestBy
 
 function _initNestedGroup (row, nestColName, by, initVal) {
   const nestedGroup = {}
