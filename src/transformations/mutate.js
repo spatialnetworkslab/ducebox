@@ -1,9 +1,9 @@
 import { map } from 'ramda'
 
-export default function mutate (mutateInstructions, list) {
+export default function mutate (mutateInstructions, df) {
   const mutateFn = getMutateFn(mutateInstructions)
-  return list
-    ? map(mutateFn, list)
+  return df
+    ? map(mutateFn, df)
     : map(mutateFn)
 }
 

@@ -11,7 +11,7 @@ const _xsummariseBy = (f, by, xf) => {
     : _xsummariseByIrreducable(f, by, xf)
 }
 
-const summariseBy = curryN(3, _dispatchable([], _xsummariseBy, function summariseBy (f, by, list) {}))
+const summariseBy = curryN(3, _dispatchable([], _xsummariseBy, function summariseBy (f, by, df) {}))
 
 export default summariseBy
 

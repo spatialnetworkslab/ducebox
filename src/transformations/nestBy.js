@@ -72,11 +72,11 @@ const _xnestBy = curryN(4, function _xnestBy (nestColName, nestAcc, by, xf) {
 })
 
 const nestBy = curryN(4, _dispatchable([], _xnestBy,
-  function (nestColName, nestAcc, by, list) {
+  function (nestColName, nestAcc, by, df) {
     return into(
       [],
       nestBy(nestColName, nestAcc, by),
-      list
+      df
     )
   }
 ))

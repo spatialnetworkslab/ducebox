@@ -47,11 +47,11 @@ const _xunnest = curryN(3, function _xunnest (nestColName, nestWrapper, xf) {
 })
 
 const unnest = curryN(3, _dispatchable([], _xunnest,
-  function (nestColName, nestWrapper, list) {
+  function (nestColName, nestWrapper, df) {
     return into(
       [],
       unnest(nestColName, nestWrapper),
-      list
+      df
     )
   }
 ))
