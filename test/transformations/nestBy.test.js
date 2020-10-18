@@ -1,4 +1,4 @@
-import { compose, nest, mutate, filter, into } from '../../src/index.js'
+import { compose, nestBy, mutate, filter, into } from '../../src/index.js'
 
 const input = [
   { c1: 'a', c2: 'a', c3: 10 },
@@ -15,7 +15,7 @@ const input = [
   { c1: 'c', c2: 'b', c3: 120 }
 ]
 
-describe('nest: standalone', () => {
+describe('nestBy: standalone', () => {
   it('works', () => {
     const expectedOutput = [
       { c1: 'a', c2: 'a', nested: [{ c3: 10 }, { c3: 30 }] },
@@ -26,16 +26,16 @@ describe('nest: standalone', () => {
       { c1: 'c', c2: 'b', nested: [{ c3: 100 }, { c3: 120 }] }
     ]
 
-    expect(nest('nested', [], ['c1', 'c2'], input)).toEqual(expectedOutput)
+    expect(nestBy('nested', [], ['c1', 'c2'], input)).toEqual(expectedOutput)
   })
 })
 
-describe('nest: transformer', () => {
+describe('nestBy: transformer', () => {
   it('mutate + filter + nest', () => {
     const xf = compose(
       mutate({ c3: row => row.c3 / 10 }),
       filter(row => row.c1 !== 'c'),
-      nest('nested', [], ['c1', 'c2'])
+      nestBy('nested', [], ['c1', 'c2'])
     )
 
     const output = into([], xf, input)
@@ -54,7 +54,7 @@ describe('nest: transformer', () => {
     const xf = compose(
       mutate({ c3: row => row.c3 / 10 }),
       filter(row => row.c1 !== 'c'),
-      nest('nested', [], ['c1', 'c2']),
+      nestBy('nested', [], ['c1', 'c2']),
       filter(row => row.c1 === 'a')
     )
 
@@ -72,7 +72,7 @@ describe('nest: transformer', () => {
     const xf = compose(
       mutate({ c3: row => row.c3 / 10 }),
       filter(row => row.c1 !== 'c'),
-      nest('nested', [], ['c1', 'c2']),
+      nestBy('nested', [], ['c1', 'c2']),
       mutate({ c2: row => row.c2 + 'x' })
     )
 

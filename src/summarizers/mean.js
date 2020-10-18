@@ -2,7 +2,7 @@ import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
 import { reduce } from 'ramda'
 
 const init = () => ({ count: 0, sum: 0 })
-const result = result => result.sum / result.count
+const result = acc => acc.sum / acc.count
 const step = (acc, val) => {
   acc.count++
   acc.sum += val

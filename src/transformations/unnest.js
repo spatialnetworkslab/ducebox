@@ -15,29 +15,29 @@ function XUnnest (nestColName, nestWrapper, xf) {
 XUnnest.prototype['@@transducer/init'] = _xfBase.init
 XUnnest.prototype['@@transducer/result'] = _xfBase.result
 
-XUnnest.prototype._initStep = function (result, input) {
-  for (const columnName in input) {
+XUnnest.prototype._initStep = function (acc, row) {
+  for (const columnName in row) {
     if (columnName !== this.nestColName) {
       this.outerColumns.push(columnName)
     }
   }
 
   this['@@transducer/step'] = this._step
-  return this['@@transducer/step'](result, input)
+  return this['@@transducer/step'](acc, row)
 }
 
-XUnnest.prototype._step = function (outerResult, outerInput) {
-  const nestedData = outerInput[this.nestColName]
+XUnnest.prototype._step = function (acc, row) {
+  const nestedData = row[this.nestColName]
 
-  const outerInputWithoutNested = Object.assign({}, outerInput)
-  delete outerInputWithoutNested[this.nestColName]
+  const rowWithoutNested = Object.assign({}, row)
+  delete rowWithoutNested[this.nestColName]
 
   return reduce(
-    (innerResult, innerInput) => this.xf[['@@transducer/step']](
-      innerResult,
-      _attach(innerInput, outerInputWithoutNested)
+    (innerAcc, innerRow) => this.xf[['@@transducer/step']](
+      innerAcc,
+      _attach(innerRow, rowWithoutNested)
     ),
-    outerResult,
+    acc,
     this.nestWrapper(nestedData)
   )
 }
