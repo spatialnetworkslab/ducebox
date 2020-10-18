@@ -1,9 +1,9 @@
-import { REDUCIBLE } from '../symbols.js'
+import { REDUCABLE } from './_symbols.js'
 
 export default function _dispatchableSummarizer (transducerCreator, fn) {
   return function (...args) {
     if (args[0] === undefined) {
-      return REDUCIBLE
+      return REDUCABLE
     }
 
     if (args[0] && args[0].constructor === String) {

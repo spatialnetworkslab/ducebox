@@ -18,21 +18,7 @@ function XNestBy (nestColName, nestAcc, by, xf) {
   this['@@transducer/step'] = this._initStep
 }
 
-XNestBy.prototype['@@transducer/init'] = _xfBase.init
-
-XNestBy.prototype['@@transducer/result'] = function () {
-  const result = this.xf['@@transducer/result'](reduce(
-    this.xf['@@transducer/step'].bind(this.xf),
-    this.xf['@@transducer/init'](),
-    Object.values(this.nestedDataById)
-  ))
-
-  this.nestedDataById = null
-
-  return result
-}
-
-XNestBy.prototype._initStep = function (acc, row) {
+export function _initStep (acc, row) {
   const bySet = new Set(this.by)
 
   for (const columnName in row) {
@@ -45,7 +31,7 @@ XNestBy.prototype._initStep = function (acc, row) {
   return this['@@transducer/step'](acc, row)
 }
 
-XNestBy.prototype._step = function (acc, row) {
+export function _step (acc, row) {
   const id = _idFromCols(row, this.by)
   const newId = !(id in this.nestedDataById)
 
@@ -65,6 +51,23 @@ XNestBy.prototype._step = function (acc, row) {
 
   return acc
 }
+
+export function _result () {
+  const result = this.xf['@@transducer/result'](reduce(
+    this.xf['@@transducer/step'].bind(this.xf),
+    this.xf['@@transducer/init'](),
+    Object.values(this.nestedDataById)
+  ))
+
+  this.nestedDataById = null
+
+  return result
+}
+
+XNestBy.prototype['@@transducer/init'] = _xfBase.init
+XNestBy.prototype['@@transducer/result'] = _result
+XNestBy.prototype._initStep = _initStep
+XNestBy.prototype._step = _step
 
 const _xnestBy = curryN(4, function _xnestBy (nestColName, nestAcc, by, xf) {
   return new XNestBy(nestColName, nestAcc, by, xf)

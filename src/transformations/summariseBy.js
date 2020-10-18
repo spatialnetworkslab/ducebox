@@ -1,7 +1,7 @@
 import { curryN } from 'ramda'
 
 import { into } from '../index.js'
-import { REDUCIBLE } from '../symbols.js'
+import { REDUCABLE } from '../internal/_symbols.js'
 import _dispatchable from '../internal/_dispatchable.js'
 import _xsummariseByReducable from '../internal/_xsummariseByReducable.js'
 import _xsummariseByIrreducable from '../internal/_xsummariseByIrreducable.js'
@@ -29,7 +29,7 @@ function _isReducable (f) {
     const summariseInstructions = f({})
 
     for (const newColumnName in summariseInstructions) {
-      if (summariseInstructions[newColumnName] !== REDUCIBLE) {
+      if (summariseInstructions[newColumnName] !== REDUCABLE) {
         return false
       }
     }

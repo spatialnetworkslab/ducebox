@@ -1,4 +1,4 @@
-import { CURRIED_COMPARE_FN } from '../symbols.js'
+import { CURRIED_COMPARE_FN } from '../internal/_symbols.js'
 
 // https://beta.observablehq.com/@mbostock/manipulating-flat-arrays
 // Also works for dates
