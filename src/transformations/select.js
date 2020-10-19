@@ -7,7 +7,7 @@ export default function select (columns, df) {
     : map(selectFn)
 }
 
-function _getSelectFn (columns) {
+export function _getSelectFn (columns) {
   return row => {
     const newRow = {}
 

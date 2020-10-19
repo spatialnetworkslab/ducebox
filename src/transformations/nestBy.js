@@ -5,6 +5,7 @@ import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
 import _idFromCols from '../internal/_idFromCols.js'
 import _stepCat from '../internal/_stepCat.js'
+import { _getSelectFn } from './select.js'
 
 const _xnestBy = curryN(3, function _xnestBy (nestInstructions, by, xf) {
   return new XNestBy(nestInstructions, by, xf)
@@ -36,7 +37,7 @@ function XNestBy (nestInstructions, by, xf) {
   this.by = by
   this.xf = xf
 
-  this.nestedColumns = []
+  this.selectNestedColumns = null
   this.nestedData = []
   this.idtoRowNumber = {}
   this.accumulatorById = {}
@@ -67,12 +68,15 @@ export function _result () {
 
 export function _initStep (acc, row) {
   const bySet = new Set(this.by)
+  const nestedColumns = []
 
   for (const columnName in row) {
     if (!bySet.has(columnName)) {
-      this.nestedColumns.push(columnName)
+      nestedColumns.push(columnName)
     }
   }
+
+  this.select = _getSelectFn(nestedColumns)
 
   this['@@transducer/step'] = this._step
   return this['@@transducer/step'](acc, row)
@@ -101,7 +105,7 @@ export function _step (acc, row) {
 
   this.nestedData[rowNumber][this.nestColName] = this.accumulatorById[id]['@@transducer/step'](
     this.nestedData[rowNumber][this.nestColName],
-    _select(row, this.nestedColumns)
+    this.select(row, this.nestedColumns)
   )
 
   return acc
@@ -122,15 +126,4 @@ function _initNestRow (row, nestColName, by, initVal) {
   nestedGroup[nestColName] = initVal
 
   return nestedGroup
-}
-
-function _select (row, columnNames) {
-  const newRow = {}
-
-  for (let i = 0; i < columnNames.length; i++) {
-    const columnName = columnNames[i]
-    newRow[columnName] = row[columnName]
-  }
-
-  return newRow
 }
