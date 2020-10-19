@@ -10,7 +10,7 @@ describe('mutate: standalone', () => {
 })
 
 describe('mutate: transformer', () => {
-  it('works', () => {
+  it('filter + mutate + filter', () => {
     const input = [
       { c1: 'a', c2: 'a', c3: 1 },
       { c1: 'a', c2: 'b', c3: 2 },

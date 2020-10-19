@@ -111,7 +111,7 @@ describe('summariseBy: standalone', () => {
 })
 
 describe('summariseBy: transformer', () => {
-  it('filter -> summariseBy -> mutate', () => {
+  it('filter + summariseBy + mutate', () => {
     const noBB = row => !(row.c1 === 'b' && row.c4 === 'b')
 
     const summariseFn = cols => ({

@@ -59,7 +59,7 @@ describe('rename: standalone', () => {
 })
 
 describe('rename: transformer', () => {
-  it('filter -> rename -> mutate', () => {
+  it('filter + rename + mutate', () => {
     const renameInstructions = {
       d1: 'c1',
       d2: 'c2',

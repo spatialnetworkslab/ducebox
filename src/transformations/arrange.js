@@ -19,12 +19,13 @@ const arrange = curryN(2, _dispatchable([], _xarrange,
 
 export default arrange
 
-function XArrange (arrangeInstructions) {
+function XArrange (arrangeInstructions, xf) {
   this.arrangeFn = arrangeInstructions.constructor === Function
     ? arrangeInstructions
     : _combineArrangeFns(arrangeInstructions)
 
   this.rows = []
+  this.xf = xf
 }
 
 XArrange.prototype['@@transducer/init'] = _xfBase.init
