@@ -1,13 +1,13 @@
-import { curryN, into } from 'ramda'
+import { curryN, into, reduce } from 'ramda'
 
 import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
 
-const _xpivotLonger = curryN(3, function _xpivotLonger (pivotInstructions, xf) {
+const _xpivotLonger = curryN(2, function _xpivotLonger (pivotInstructions, xf) {
   return new XPivotLonger(pivotInstructions, xf)
 })
 
-const pivotLonger = curryN(3, _dispatchable([], _xpivotLonger,
+const pivotLonger = curryN(2, _dispatchable([], _xpivotLonger,
   function (pivotInstructions, df) {
     return into(
       [],
@@ -51,6 +51,8 @@ function _initStep (acc, row) {
 }
 
 function _step (acc, row) {
+  const newRows = []
+
   for (let j = 0; j < this.pivotColumns.length; j++) {
     const newRow = {}
 
@@ -65,6 +67,12 @@ function _step (acc, row) {
       newRow[idColumnName] = row[idColumnName]
     }
 
-    return this.xf['@@transducer/step'](acc, newRow)
+    newRows.push(newRow)
   }
+
+  return reduce(
+    this.xf['@@transducer/step'].bind(this.xf),
+    acc,
+    newRows
+  )
 }
