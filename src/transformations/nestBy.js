@@ -37,7 +37,7 @@ function XNestBy (nestInstructions, by, xf) {
   this.by = by
   this.xf = xf
 
-  this.selectNestedColumns = null
+  this.select = null
   this.nestedData = []
   this.idtoRowNumber = {}
   this.accumulatorById = {}
@@ -105,7 +105,7 @@ export function _step (acc, row) {
 
   this.nestedData[rowNumber][this.nestColName] = this.accumulatorById[id]['@@transducer/step'](
     this.nestedData[rowNumber][this.nestColName],
-    this.select(row, this.nestedColumns)
+    this.select(row)
   )
 
   return acc

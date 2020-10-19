@@ -1,6 +1,8 @@
 // compare functions
-// TODO fix this
-// export * from './compare/index.js'
+export { default as ascending } from './compare/ascending.js'
+export { default as ascendingStr } from './compare/ascendingStr.js'
+export { default as descending } from './compare/descending.js'
+export { default as descendingStr } from './compare/descendingStr.js'
 
 // core
 // TODO have own functions here
