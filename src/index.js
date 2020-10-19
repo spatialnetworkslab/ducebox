@@ -26,6 +26,7 @@ export { default as mode } from './summarizers/mode.js'
 export { default as sum } from './summarizers/sum.js'
 
 // transformations
+export { default as arrange } from './transformations/arrange.js'
 export { filter } from 'ramda'
 export { default as mutate } from './transformations/mutate.js'
 export { default as nestBy } from './transformations/nestBy.js'
