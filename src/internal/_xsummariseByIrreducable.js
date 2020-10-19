@@ -15,8 +15,10 @@ function XSummariseByIrreducable (f, by, xf) {
   this.getAccumulator = accumulator
 
   this.nestedColumns = []
-  this.nestedDataById = {}
+  this.nestedData = []
+  this.idtoRowNumber = {}
   this.accumulatorById = {}
+  this.currentRow = 0
 
   this['@@transducer/step'] = this._initStep
 }

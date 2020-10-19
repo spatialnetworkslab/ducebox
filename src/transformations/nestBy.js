@@ -37,8 +37,10 @@ function XNestBy (nestInstructions, by, xf) {
   this.xf = xf
 
   this.nestedColumns = []
-  this.nestedDataById = {}
+  this.nestedData = []
+  this.idtoRowNumber = {}
   this.accumulatorById = {}
+  this.currentRow = 0
 
   this['@@transducer/step'] = this._initStep
 }
@@ -53,10 +55,12 @@ export function _result () {
   const result = this.xf['@@transducer/result'](reduce(
     this._finalStep.bind(this),
     this.xf['@@transducer/init'](),
-    Object.values(this.nestedDataById)
+    this.nestedData
   ))
 
-  this.nestedDataById = null
+  this.nestedData = null
+  this.accumulatorById = null
+  this.idtoRowNumber = null
 
   return result
 }
@@ -76,21 +80,27 @@ export function _initStep (acc, row) {
 
 export function _step (acc, row) {
   const id = _idFromCols(row, this.by)
-  const newId = !(id in this.nestedDataById)
+  const newId = !(id in this.accumulatorById)
 
   if (newId) {
     this.accumulatorById[id] = _stepCat(this.getAccumulator())
 
-    this.nestedDataById[id] = _initNestedGroup(
+    const nestRow = _initNestRow(
       row,
       this.nestColName,
       this.by,
       this.accumulatorById[id]['@@transducer/init']()
     )
+
+    this.nestedData.push(nestRow)
+    this.idtoRowNumber[id] = this.currentRow
+    this.currentRow++
   }
 
-  this.nestedDataById[id][this.nestColName] = this.accumulatorById[id]['@@transducer/step'](
-    this.nestedDataById[id][this.nestColName],
+  const rowNumber = this.idtoRowNumber[id]
+
+  this.nestedData[rowNumber][this.nestColName] = this.accumulatorById[id]['@@transducer/step'](
+    this.nestedData[rowNumber][this.nestColName],
     _select(row, this.nestedColumns)
   )
 
@@ -101,7 +111,7 @@ function _finalStep (acc, row) {
   return this.xf['@@transducer/step'](acc, row)
 }
 
-function _initNestedGroup (row, nestColName, by, initVal) {
+function _initNestRow (row, nestColName, by, initVal) {
   const nestedGroup = {}
 
   for (let i = 0; i < by.length; i++) {
