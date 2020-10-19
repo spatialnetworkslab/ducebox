@@ -1,4 +1,12 @@
-import { arrange, ascending, descending } from '../../src/index.js'
+import { 
+  arrange,
+  ascending,
+  descending,
+  compose,
+  mutate,
+  filter,
+  into
+} from '../../src/index.js'
 
 const input = [
   { a: 1, b: 1 },
@@ -44,6 +52,24 @@ describe('arrange: standalone', () => {
   })
 })
 
-// describe('arrange: transformer', () => {
-//   it('mutate -> ')
-// })
+describe('arrange: transformer', () => {
+  it('mutate + arrange + filter', () => {
+    const xf = compose(
+      mutate({ c: ({ b }) => b + 1 }),
+      arrange([ascending('a'), descending('c')]),
+      filter(row => row.c !== 8)
+    )
+
+    const output = into([], xf, input)
+
+    const expectedOutput = [
+      { a: 1, b: 1, c: 2 },
+      { a: 2, b: 2, c: 3 },
+      { a: 2, b: 1, c: 2 },
+      { a: 3, b: 4, c: 5 },
+      { a: 3, b: 3, c: 4 }
+    ]
+
+    expect(output).toEqual(expectedOutput)
+  })
+})
