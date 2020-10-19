@@ -48,6 +48,10 @@ describe('nestBy: standalone', () => {
 
     expect(output).toEqual(expectedOutput)
   })
+
+  it('works if by is empty array', () => {
+    expect(nestBy('nested', [], input)).toEqual([{ nested: input }])
+  })
 })
 
 describe('nestBy: transformer', () => {

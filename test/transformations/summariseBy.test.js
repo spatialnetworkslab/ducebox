@@ -95,6 +95,19 @@ describe('summariseBy: standalone', () => {
 
     expect(output).toEqual(expectedOutput)
   })
+
+  it('works if by is empty array', () => {
+    const summariseFn = cols => ({
+      mean_c2: mean(cols.c2),
+      sum_c3: sum(cols.c3)
+    })
+
+    const output = summariseBy(summariseFn, [], input2)
+
+    const expectedOutput = [{ mean_c2: 4.5, sum_c3: 360 }]
+
+    expect(output).toEqual(expectedOutput)
+  })
 })
 
 describe('summariseBy: transformer', () => {

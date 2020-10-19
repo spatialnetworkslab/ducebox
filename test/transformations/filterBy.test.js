@@ -4,4 +4,8 @@ describe('filterBy: standalone', () => {
   it('works', () => {
 
   })
+
+  it('works if by is empty array', () => {
+
+  })
 })
