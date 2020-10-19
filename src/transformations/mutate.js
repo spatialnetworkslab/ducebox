@@ -1,13 +1,13 @@
 import { map } from 'ramda'
 
 export default function mutate (mutateInstructions, df) {
-  const mutateFn = getMutateFn(mutateInstructions)
+  const mutateFn = _getMutateFn(mutateInstructions)
   return df
     ? map(mutateFn, df)
     : map(mutateFn)
 }
 
-function getMutateFn (mutateInstructions) {
+function _getMutateFn (mutateInstructions) {
   return row => {
     const newRow = Object.assign({}, row)
 
