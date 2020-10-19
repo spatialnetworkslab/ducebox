@@ -25,6 +25,7 @@ export { default as sum } from './summarizers/sum.js'
 
 // transformations
 export { filter } from 'ramda'
+export { default as filterBy } from './transformations/filterBy.js'
 export { default as mutate } from './transformations/mutate.js'
 export { default as nestBy } from './transformations/nestBy.js'
 export { default as rename } from './transformations/rename.js'
