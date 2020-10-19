@@ -1,4 +1,4 @@
-import { 
+import {
   arrange,
   ascending,
   descending,
