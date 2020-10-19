@@ -5,10 +5,7 @@ import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
 import _idFromCols from '../internal/_idFromCols.js'
 import { accumulator } from '../io/columnOriented.js'
-import {
-  _initStep as _initStepNestBy,
-  _step as _stepNestBy
-} from './nestBy.js'
+import { _initStep, _step } from './nestBy.js'
 
 const _xfilterBy = curryN(3, function _xfilterBy (getFilterFn, by, xf) {
   return new XFilterBy(getFilterFn, by, xf)
@@ -35,8 +32,12 @@ function XFilterBy (getFilterFn, by, xf) {
   this.getAccumulator = accumulator
 
   this.nestedColumns = []
-  this.nestedDataById = {}
+  this.nestedData = []
+  this.idtoRowNumber = {}
   this.accumulatorById = {}
+  this.currentRow = 0
+
+  this.filterFnById = {}
 
   this['@@transducer/step'] = this._initStep
 }
@@ -47,9 +48,7 @@ XFilterBy.prototype._initStep = _initStep
 XFilterBy.prototype._step = _step
 
 function _result () {
+  for (let i = 0; i < this.nestedData.length; i++) {
 
+  }
 }
-
-function _initStep () {}
-
-function _step () {}
