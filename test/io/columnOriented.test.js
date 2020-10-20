@@ -49,9 +49,9 @@ describe('columnOriented: input and output', () => {
   })
 
   test('col -> row', () => {
-    const iterable = columnOriented.iterable(colData)
+    const input = columnOriented.wrap(colData)
 
-    expect(into([], transform, iterable)).toEqual(expectedRowData)
+    expect(into([], transform, input)).toEqual(expectedRowData)
   })
 
   test('row -> col', () => {
@@ -61,9 +61,9 @@ describe('columnOriented: input and output', () => {
   })
 
   test('col -> col', () => {
-    const iterable = columnOriented.iterable(colData)
+    const input = columnOriented.wrap(colData)
     const accumulator = columnOriented.accumulator()
 
-    expect(into(accumulator, transform, iterable)).toEqual(expectedColData)
+    expect(into(accumulator, transform, input)).toEqual(expectedColData)
   })
 })
