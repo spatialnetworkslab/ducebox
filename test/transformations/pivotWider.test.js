@@ -19,8 +19,8 @@ describe('pivotWider: standalone', () => {
     const output = pivotWider(pivotInstructions, input)
 
     const expectedOutput = [
-      { idCol: 'a', x: 1, y: 2, z: 300 },
-      { idCol: 'b', x: 10, y: 20, z: 300 },
+      { idCol: 'a', x: 1, y: 2, z: 3 },
+      { idCol: 'b', x: 10, y: 20, z: 30 },
       { idCol: 'c', x: 100, y: 200, z: 300 }
     ]
 
@@ -44,7 +44,7 @@ describe('pivotWider: standalone', () => {
 
     const expectedOutput = [
       { idCol: 'a', x: 1, y: 2, z: null },
-      { idCol: 'b', x: 10, y: 20, z: 300 },
+      { idCol: 'b', x: 10, y: 20, z: 30 },
       { idCol: 'c', x: 100, y: null, z: 300 }
     ]
 
@@ -72,7 +72,7 @@ describe('pivotWider: standalone', () => {
 
     const expectedOutput = [
       { idCol: 'a', x: 1, y: 2, z: NaN },
-      { idCol: 'b', x: 10, y: 20, z: 300 },
+      { idCol: 'b', x: 10, y: 20, z: 30 },
       { idCol: 'c', x: 100, y: NaN, z: 300 }
     ]
 

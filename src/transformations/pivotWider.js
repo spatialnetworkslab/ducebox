@@ -29,7 +29,7 @@ function XPivotWider ({ namesFrom, valuesFrom, valuesFill = null }, xf) {
 
   this.idColumns = null
   this.widerRows = []
-  this.idtoRowNumber = {}
+  this.idToRowNumber = {}
   this.currentRow = 0
   this.newColumnsSet = new Set()
   this.newColumns = null
@@ -64,7 +64,7 @@ function _initStep (acc, row) {
 
 function _step (acc, row) {
   const id = _idFromCols(row, this.idColumns)
-  const newId = !(id in this.idtoRowNumber)
+  const newId = !(id in this.idToRowNumber)
 
   if (newId) {
     this.idToRowNumber[id] = this.currentRow
