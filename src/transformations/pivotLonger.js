@@ -26,7 +26,7 @@ function XPivotLonger ({ columns, namesTo, valuesTo }, xf) {
   this.valuesTo = valuesTo
   this.xf = xf
 
-  this.columns = []
+  this.columns = null
   this.idColumns = null
 
   this['@@transducer/step'] = this._initStep
@@ -38,9 +38,7 @@ XPivotLonger.prototype._initStep = _initStep
 XPivotLonger.prototype._step = _step
 
 function _initStep (acc, row) {
-  for (const columnName in row) {
-    this.columns.push(columnName)
-  }
+  this.columns = Object.keys(row)
 
   this.idColumns = this.columns.filter(
     columnName => !this.pivotColumnsSet.has(columnName)
