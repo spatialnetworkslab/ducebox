@@ -5,7 +5,8 @@ import {
   compose,
   filter,
   mutate,
-  into
+  into,
+  select
 } from '../../src/index.js'
 
 const rowData = [
@@ -44,26 +45,46 @@ const expectedColData = {
 }
 
 describe('columnOriented: input and output', () => {
-  test('row -> row', () => {
+  it('row -> row', () => {
     expect(into([], transform, rowData)).toEqual(expectedRowData)
   })
 
-  test('col -> row', () => {
+  it('col -> row', () => {
     const input = columnOriented.wrap(colData)
 
     expect(into([], transform, input)).toEqual(expectedRowData)
   })
 
-  test('row -> col', () => {
+  it('row -> col', () => {
     const accumulator = columnOriented.accumulator()
 
     expect(into(accumulator, transform, rowData)).toEqual(expectedColData)
   })
 
-  test('col -> col', () => {
+  it('col -> col', () => {
     const input = columnOriented.wrap(colData)
     const accumulator = columnOriented.accumulator()
 
     expect(into(accumulator, transform, input)).toEqual(expectedColData)
+  })
+})
+
+describe('columnOriented: transformations', () => {
+  it('works with adding/removing columns', () => {
+    const xf = compose(
+      mutate({ tripleQuantity: row => row.quantity * 3 }),
+      select(['fruit', 'tripleQuantity'])
+    )
+
+    const input = columnOriented.wrap(colData)
+    const accumulator = columnOriented.accumulator()
+    const output = into(accumulator, xf, input)
+
+    const expectedOutput = {
+      fruit: ['apple', 'banana', 'coconut', 'durian', 'elderberry', 'fig'],
+      tripleQuantity: [30, 15, 24, 18, 21, 33]
+    }
+
+    expect(output).toEqual(expectedOutput)
   })
 })
