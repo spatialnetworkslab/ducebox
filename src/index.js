@@ -5,13 +5,10 @@ export { default as descending } from './compare/descending.js'
 export { default as descendingStr } from './compare/descendingStr.js'
 
 // core
-// TODO have own functions here
-export {
-  compose,
-  into,
-  reduce,
-  transduce
-} from 'ramda'
+export { default as compose } from './core/compose.js'
+export { default as into } from './core/into.js'
+export { default as reduce } from './core/reduce.js'
+export { default as transduce } from './core/transduce.js'
 
 // io
 export * as columnOriented from './io/columnOriented.js'
@@ -27,7 +24,7 @@ export { default as sum } from './summarizers/sum.js'
 
 // transformations
 export { default as arrange } from './transformations/arrange.js'
-export { filter } from 'ramda'
+export { default as filter } from './transformations/filter.js'
 export { default as mutate } from './transformations/mutate.js'
 export { default as nestBy } from './transformations/nestBy.js'
 export { default as pivotLonger } from './transformations/pivotLonger.js'
