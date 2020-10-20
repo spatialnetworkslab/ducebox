@@ -1,5 +1,6 @@
-import { reduce, curryN, into } from 'ramda'
+import { curryN } from 'ramda'
 
+import { reduce, into } from '../index.js'
 import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
 

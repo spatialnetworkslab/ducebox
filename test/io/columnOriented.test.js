@@ -1,5 +1,12 @@
-import { columnOriented, mutate } from '../../src'
-import { compose, filter, take, into } from 'ramda'
+import { take } from 'ramda'
+
+import {
+  columnOriented,
+  compose,
+  filter,
+  mutate,
+  into
+} from '../../src/index.js'
 
 const rowData = [
   { fruit: 'apple', quantity: 10 },

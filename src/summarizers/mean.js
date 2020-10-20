@@ -1,5 +1,5 @@
 import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
-import { reduce } from 'ramda'
+import { reduce } from '../index.js'
 
 const init = () => ({ count: 0, sum: 0 })
 const result = acc => acc.sum / acc.count
