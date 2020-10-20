@@ -45,10 +45,6 @@ const expectedColData = {
 }
 
 describe('columnOriented: input and output', () => {
-  it('row -> row', () => {
-    expect(into([], transform, rowData)).toEqual(expectedRowData)
-  })
-
   it('col -> row', () => {
     const input = columnOriented.wrap(colData)
 

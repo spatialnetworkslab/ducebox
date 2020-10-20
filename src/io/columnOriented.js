@@ -1,7 +1,7 @@
 import { identity } from 'ramda'
 
 export function wrap (data) {
-  const length = getLength(data)
+  const length = _getLength(data)
 
   return {
     reduce: function (step, acc) {
@@ -33,7 +33,7 @@ export function accumulator () {
   return new ColumnOrientedAccumulator()
 }
 
-function getLength (data) {
+function _getLength (data) {
   return data[Object.keys(data)[0]].length
 }
 
@@ -43,8 +43,10 @@ function ColumnOrientedAccumulator () {
 
 ColumnOrientedAccumulator.prototype['@@transducer/init'] = () => ({})
 ColumnOrientedAccumulator.prototype['@@transducer/result'] = identity
+ColumnOrientedAccumulator.prototype._initStep = _initStep
+ColumnOrientedAccumulator.prototype._step = _step
 
-ColumnOrientedAccumulator.prototype._initStep = function (acc, row) {
+function _initStep (acc, row) {
   for (const columnName in row) {
     acc[columnName] = [row[columnName]]
   }
@@ -54,7 +56,7 @@ ColumnOrientedAccumulator.prototype._initStep = function (acc, row) {
   return acc
 }
 
-ColumnOrientedAccumulator.prototype._step = function (acc, row) {
+function _step (acc, row) {
   for (const columnName in row) {
     acc[columnName].push(row[columnName])
   }

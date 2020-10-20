@@ -12,6 +12,7 @@ export { default as transduce } from './core/transduce.js'
 
 // io
 export * as columnOriented from './io/columnOriented.js'
+export * as geojson from './io/geojson.js'
 
 // summarizers
 export { default as count } from './summarizers/count.js'
