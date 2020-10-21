@@ -7,7 +7,7 @@ export default [
   {
     input: 'src/index.js',
     output: {
-      name: 'data-pipe',
+      name: 'ducebox',
       file: pkg.browser,
       format: 'umd'
     },

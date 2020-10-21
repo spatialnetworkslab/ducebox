@@ -1,3 +1,3 @@
-# data-pipe
+# ducebox
 
-Fast and memory efficient data transformations
+[tidyverse](https://www.tidyverse.org/) verbs implemented as transducers
