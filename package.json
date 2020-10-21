@@ -5,8 +5,12 @@
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
+    "@dynatrace/zakzak": "^0.6.3",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "arquero": "^0.13.2",
+    "danfojs-node": "^0.1.5",
+    "dataframe-js": "^1.4.3",
     "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
@@ -14,12 +18,15 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^24.9.0",
-    "rollup": "^1.26.2"
+    "pandas-js": "^0.2.4",
+    "rollup": "^1.26.2",
+    "zebras": "0.0.18"
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "jest"
+    "test": "jest",
+    "perf": "npm run build && node ./perf/perf.js --"
   },
   "files": [
     "dist"
