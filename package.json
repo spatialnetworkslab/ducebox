@@ -26,7 +26,7 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
-    "perf": "npm run build && npx zakzak"
+    "perf": "npm run build && node ./perf/perf.js --"
   },
   "files": [
     "dist"
