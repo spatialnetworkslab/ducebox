@@ -5,6 +5,7 @@
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
+    "@dynatrace/zakzak": "^0.6.3",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "eslint": "^6.6.0",
@@ -19,7 +20,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "jest"
+    "test": "jest",
+    "perf": "npm run build && npx zakzak"
   },
   "files": [
     "dist"
