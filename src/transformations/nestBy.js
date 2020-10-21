@@ -101,7 +101,7 @@ export function _step (acc, row) {
   return acc
 }
 
-function _initNestRow (row, nestColName, by, initVal) {
+export function _initNestRow (row, nestColName, by, initVal) {
   const nestRow = {}
 
   for (let i = 0; i < by.length; i++) {

@@ -24,7 +24,7 @@ describe('filterBy: standalone', () => {
 
   it('works with irreducable summarizers', () => {
     const summariseFn = ({ c3 }) => ({ medianc3: median(c3) })
-    const predicate = (row, { mediannc3 }) => row.c3 > mediannc3
+    const predicate = (row, { medianc3 }) => row.c3 > medianc3
 
     const output = filterBy(summariseFn, predicate, ['c1'], input)
 
