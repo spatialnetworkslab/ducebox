@@ -50,11 +50,10 @@ XNestBy.prototype['@@transducer/init'] = _xfBase.init
 XNestBy.prototype['@@transducer/result'] = _result
 XNestBy.prototype._initStep = _initStep
 XNestBy.prototype._step = _step
-XNestBy.prototype._finalStep = _finalStep
 
 export function _result () {
   const result = this.xf['@@transducer/result'](reduce(
-    this._finalStep.bind(this),
+    this.xf['@@transducer/step'].bind(this.xf),
     this.xf['@@transducer/init'](),
     this.nestedData
   ))
@@ -109,10 +108,6 @@ export function _step (acc, row) {
   )
 
   return acc
-}
-
-function _finalStep (acc, row) {
-  return this.xf['@@transducer/step'](acc, row)
 }
 
 function _initNestRow (row, nestColName, by, initVal) {

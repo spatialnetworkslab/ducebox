@@ -6,17 +6,17 @@ import _dispatchable from '../internal/_dispatchable.js'
 import _xsummariseByReducable from '../internal/_xsummariseByReducable.js'
 import _xsummariseByIrreducable from '../internal/_xsummariseByIrreducable.js'
 
-const _xsummariseBy = curryN(3, (f, by, xf) => {
-  return _isReducable(f)
-    ? _xsummariseByReducable(f, by, xf)
-    : _xsummariseByIrreducable(f, by, xf)
+const _xsummariseBy = curryN(3, (summariseFn, by, xf) => {
+  return _isReducable(summariseFn)
+    ? _xsummariseByReducable(summariseFn, by, xf)
+    : _xsummariseByIrreducable(summariseFn, by, xf)
 })
 
 const summariseBy = curryN(3, _dispatchable([], _xsummariseBy,
-  function (f, by, df) {
+  function (summariseFn, by, df) {
     return into(
       [],
-      summariseBy(f, by),
+      summariseBy(summariseFn, by),
       df
     )
   }
@@ -24,9 +24,9 @@ const summariseBy = curryN(3, _dispatchable([], _xsummariseBy,
 
 export default summariseBy
 
-function _isReducable (f) {
+export function _isReducable (summariseFn) {
   try {
-    const summariseInstructions = f({})
+    const summariseInstructions = summariseFn({})
 
     for (const newColumnName in summariseInstructions) {
       if (summariseInstructions[newColumnName] !== REDUCABLE) {

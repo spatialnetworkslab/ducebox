@@ -2,12 +2,14 @@ import _xfBase from './_xfBase.js'
 import { _result, _initStep, _step } from '../transformations/nestBy.js'
 import { accumulator } from '../io/columnOriented.js'
 
-const _xsummarisebyIrreducable = (f, by, xf) => new XSummariseByIrreducable(f, by, xf)
+const _xsummariseByIrreducable = (summariseFn, by, xf) => {
+  return new XSummariseByIrreducable(summariseFn, by, xf)
+}
 
-export default _xsummarisebyIrreducable
+export default _xsummariseByIrreducable
 
-function XSummariseByIrreducable (f, by, xf) {
-  this.f = f
+function XSummariseByIrreducable (summariseFn, by, xf) {
+  this.summariseFn = summariseFn
   this.by = by
   this.xf = xf
 
@@ -28,7 +30,7 @@ XSummariseByIrreducable.prototype['@@transducer/result'] = _result
 XSummariseByIrreducable.prototype._initStep = _initStep
 XSummariseByIrreducable.prototype._step = _step
 XSummariseByIrreducable.prototype._finalStep = function (acc, row) {
-  const summarizedRow = this.f(row[this.nestColName])
+  const summarizedRow = this.summariseFn(row[this.nestColName])
 
   for (let i = 0; i < this.by.length; i++) {
     const byCol = this.by[i]

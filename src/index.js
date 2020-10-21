@@ -26,6 +26,7 @@ export { default as sum } from './summarizers/sum.js'
 // transformations
 export { default as arrange } from './transformations/arrange.js'
 export { default as filter } from './transformations/filter.js'
+export { default as filterBy } from './transformations/filterBy.js'
 export { default as mutate } from './transformations/mutate.js'
 export { default as nestBy } from './transformations/nestBy.js'
 export { default as pivotLonger } from './transformations/pivotLonger.js'

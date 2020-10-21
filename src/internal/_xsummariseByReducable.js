@@ -2,21 +2,31 @@ import { reduce } from '../index.js'
 import _idFromCols from './_idFromCols.js'
 import _xfBase from './_xfBase.js'
 
-const _xsummarisebyReducable = (f, by, xf) => new XSummariseByReducable(f, by, xf)
+const _xsummariseByReducable = (summariseFn, by, xf) => {
+  return new XSummariseByReducable(summariseFn, by, xf)
+}
 
-export default _xsummarisebyReducable
+export default _xsummariseByReducable
 
-function XSummariseByReducable (f, by, xf) {
-  this.instructions = _getReducableInstructions(f)
+function XSummariseByReducable (summariseFn, by, xf) {
+  this.instructions = _getReducableInstructions(summariseFn)
   this.by = by
   this.xf = xf
 
   this.summarizedDataById = {}
 }
 
-XSummariseByReducable.prototype['@@transducer/init'] = _xfBase.init
+export function _getReducableInstructions (f) {
+  const columnProxy = new Proxy({}, { get (_, prop) { return prop } })
+  return f(columnProxy)
+}
 
-XSummariseByReducable.prototype['@@transducer/result'] = function () {
+XSummariseByReducable.prototype['@@transducer/init'] = _xfBase.init
+XSummariseByReducable.prototype['@@transducer/result'] = _result
+XSummariseByReducable.prototype['@@transducer/step'] = _step
+XSummariseByReducable.prototype._finalStep = _finalStep
+
+function _result () {
   const result = this.xf['@@transducer/result'](reduce(
     this._finalStep.bind(this),
     this.xf['@@transducer/init'](),
@@ -28,7 +38,7 @@ XSummariseByReducable.prototype['@@transducer/result'] = function () {
   return result
 }
 
-XSummariseByReducable.prototype['@@transducer/step'] = function (acc, row) {
+function _step (acc, row) {
   const id = _idFromCols(row, this.by)
   const newId = !(id in this.summarizedDataById)
 
@@ -49,7 +59,7 @@ XSummariseByReducable.prototype['@@transducer/step'] = function (acc, row) {
   return acc
 }
 
-XSummariseByReducable.prototype._finalStep = function (acc, row) {
+function _finalStep (acc, row) {
   for (const newColumnName in this.instructions) {
     row[newColumnName] = this
       .instructions[newColumnName]
@@ -59,12 +69,7 @@ XSummariseByReducable.prototype._finalStep = function (acc, row) {
   return this.xf['@@transducer/step'](acc, row)
 }
 
-function _getReducableInstructions (f) {
-  const columnProxy = new Proxy({}, { get (_, prop) { return prop } })
-  return f(columnProxy)
-}
-
-function _initSummaryGroup (instructions, row, by) {
+export function _initSummaryGroup (instructions, row, by) {
   const summaryGroup = {}
 
   for (const newColumnName in instructions) {
@@ -80,7 +85,7 @@ function _initSummaryGroup (instructions, row, by) {
   return summaryGroup
 }
 
-function _updateSummaryGroup (summaryGroup, instructions, row) {
+export function _updateSummaryGroup (summaryGroup, instructions, row) {
   for (const newColumnName in instructions) {
     const instruction = instructions[newColumnName]
 
