@@ -1,4 +1,4 @@
-export default function generateCol (N) {
+module.exports.generateCol = function (N) {
   const letters = 'abcdefghijklmnopqrstuvwxyz'
   const randomLetter = () => letters[Math.floor(Math.random() * 26)]
   const randomNumber = () => Math.floor(Math.random() * 10) * 10
