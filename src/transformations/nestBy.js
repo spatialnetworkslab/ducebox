@@ -1,7 +1,7 @@
 import { curryN } from 'ramda'
 
-import reduce from '../core/reduce.js'
 import into from '../core/into.js'
+import _reduceObjVals from '../internal/_reduceObjVals.js'
 import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
 import _idFromCols from '../internal/_idFromCols.js'
@@ -39,10 +39,8 @@ function XNestBy (nestInstructions, by, xf) {
   this.xf = xf
 
   this.select = null
-  this.nestedData = []
-  this.idtoRowNumber = {}
+  this.nestedDataById = {}
   this.accumulatorById = {}
-  this.currentRow = 0
 
   this['@@transducer/step'] = this._initStep
 }
@@ -53,19 +51,11 @@ XNestBy.prototype._initStep = _initStep
 XNestBy.prototype._step = _step
 
 export function _result () {
-  const result = this.xf['@@transducer/result'](reduce(
+  return this.xf['@@transducer/result'](_reduceObjVals(
     this.xf['@@transducer/step'].bind(this.xf),
     this.xf['@@transducer/init'](),
-    this.nestedData
+    this.nestedDataById
   ))
-
-  console.log(result)
-
-  this.nestedData = null
-  this.accumulatorById = null
-  this.idtoRowNumber = null
-
-  return result
 }
 
 export function _initStep (acc, row) {
@@ -98,15 +88,13 @@ export function _step (acc, row) {
       this.accumulatorById[id]['@@transducer/init']()
     )
 
-    this.nestedData.push(nestRow)
-    this.idtoRowNumber[id] = this.currentRow
-    this.currentRow++
+    this.nestedDataById[id] = nestRow
   }
 
-  const rowNumber = this.idtoRowNumber[id]
+  const xf = this.accumulatorById[id]
 
-  this.nestedData[rowNumber][this.nestColName] = this.accumulatorById[id]['@@transducer/step'](
-    this.nestedData[rowNumber][this.nestColName],
+  this.nestedDataById[id][this.nestColName] = xf['@@transducer/step'](
+    this.nestedDataById[id][this.nestColName],
     this.select(row)
   )
 
@@ -114,14 +102,14 @@ export function _step (acc, row) {
 }
 
 function _initNestRow (row, nestColName, by, initVal) {
-  const nestedGroup = {}
+  const nestRow = {}
 
   for (let i = 0; i < by.length; i++) {
     const colName = by[i]
-    nestedGroup[colName] = row[colName]
+    nestRow[colName] = row[colName]
   }
 
-  nestedGroup[nestColName] = initVal
+  nestRow[nestColName] = initVal
 
-  return nestedGroup
+  return nestRow
 }

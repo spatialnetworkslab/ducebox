@@ -1,6 +1,6 @@
 import { curryN } from 'ramda'
 
-import reduce from '../core/reduce.js'
+import _reduceObjVals from '../internal/_reduceObjVals.js'
 import into from '../core/into.js'
 import _dispatchable from '../internal/_dispatchable.js'
 import _xfBase from '../internal/_xfBase.js'
@@ -29,9 +29,7 @@ function XPivotWider ({ namesFrom, valuesFrom, valuesFill = null }, xf) {
   this.xf = xf
 
   this.idColumns = null
-  this.widerRows = []
-  this.idToRowNumber = {}
-  this.currentRow = 0
+  this.widerRowsById = {}
   this.newColumnsSet = new Set()
   this.newColumns = null
 
@@ -47,10 +45,10 @@ XPivotWider.prototype._finalStep = _finalStep
 function _result () {
   this.newColumns = Array.from(this.newColumnsSet)
 
-  return this.xf['@@transducer/result'](reduce(
+  return this.xf['@@transducer/result'](_reduceObjVals(
     this._finalStep.bind(this),
     this.xf['@@transducer/init'](),
-    this.widerRows
+    this.widerRowsById
   ))
 }
 
@@ -65,12 +63,9 @@ function _initStep (acc, row) {
 
 function _step (acc, row) {
   const id = _idFromCols(row, this.idColumns)
-  const newId = !(id in this.idToRowNumber)
+  const newId = !(id in this.widerRowsById)
 
   if (newId) {
-    this.idToRowNumber[id] = this.currentRow
-    this.currentRow++
-
     const widerRow = {}
 
     for (let i = 0; i < this.idColumns.length; i++) {
@@ -78,14 +73,13 @@ function _step (acc, row) {
       widerRow[idColumn] = row[idColumn]
     }
 
-    this.widerRows.push(widerRow)
+    this.widerRowsById[id] = widerRow
   }
 
-  const rowNumber = this.idToRowNumber[id]
   const column = row[this.namesFrom]
   const value = row[this.valuesFrom]
 
-  this.widerRows[rowNumber][column] = value
+  this.widerRowsById[id][column] = value
   this.newColumnsSet.add(column)
 }
 

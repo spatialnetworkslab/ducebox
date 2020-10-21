@@ -1,4 +1,4 @@
-import reduce from '../core/reduce.js'
+import _reduceObjVals from './_reduceObjVals.js'
 import _idFromCols from './_idFromCols.js'
 import _xfBase from './_xfBase.js'
 
@@ -27,15 +27,11 @@ XSummariseByReducable.prototype['@@transducer/step'] = _step
 XSummariseByReducable.prototype._finalStep = _finalStep
 
 function _result () {
-  const result = this.xf['@@transducer/result'](reduce(
+  return this.xf['@@transducer/result'](_reduceObjVals(
     this._finalStep.bind(this),
     this.xf['@@transducer/init'](),
-    Object.values(this.summarizedDataById)
+    this.summarizedDataById
   ))
-
-  this.summarizedDataById = null
-
-  return result
 }
 
 function _step (acc, row) {
