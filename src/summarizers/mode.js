@@ -1,4 +1,4 @@
-import { reduce } from '../index.js'
+import reduce from '../core/reduce.js'
 import _dispatchableSummarizer from '../internal/_dispatchableSummarizer.js'
 
 const init = () => ({})

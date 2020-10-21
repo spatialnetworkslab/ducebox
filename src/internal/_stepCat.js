@@ -1,6 +1,7 @@
+import { objOf, identity } from 'ramda'
+
 import _isArrayLike from './_isArrayLike.js'
 import _isTransformer from './_isTransformer.js'
-import { objOf, identity } from 'ramda'
 
 const _stepCatArray = {
   '@@transducer/init': Array,

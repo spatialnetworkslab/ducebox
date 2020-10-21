@@ -1,4 +1,4 @@
-import { reduce } from '../index.js'
+import reduce from '../core/reduce.js'
 import _idFromCols from './_idFromCols.js'
 import _xfBase from './_xfBase.js'
 

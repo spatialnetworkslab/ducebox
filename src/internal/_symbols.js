@@ -1,1 +1,1 @@
-export const REDUCIBLE = Symbol('Reducible')
+export const REDUCABLE = Symbol('Reducable')

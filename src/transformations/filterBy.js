@@ -1,6 +1,6 @@
 import { curryN } from 'ramda'
 
-import { into } from '../index.js'
+import into from '../core/into.js'
 import _dispatchable from '../internal/_dispatchable.js'
 import { _isReducable } from './summariseBy.js'
 import _xfilterByReducable from '../internal/_xfilterByReducable.js'

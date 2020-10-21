@@ -1,6 +1,6 @@
 import { curryN } from 'ramda'
 
-import { into } from '../index.js'
+import into from '../core/into.js'
 import { REDUCABLE } from '../internal/_symbols.js'
 import _dispatchable from '../internal/_dispatchable.js'
 import _xsummariseByReducable from '../internal/_xsummariseByReducable.js'
