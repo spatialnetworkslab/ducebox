@@ -6,7 +6,7 @@
 		"maxSamples": 5000,
 		"minIterations": 0,
 		"maxIterations": 0,
-		"memoryBenchmark": false,
+		"memoryBenchmark": true,
 		"minMemorySamples": 10,
 		"maxMemorySamples": 100,
 		"cpuProfiling": false,
