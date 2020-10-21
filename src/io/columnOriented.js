@@ -1,52 +1,65 @@
-export default {
-  getDataLength,
-  getColumnNames,
-  getRow,
-  initData,
-  addRow,
-  sortIntoOrder
+import { identity } from 'ramda'
+
+export function wrap (data) {
+  const length = _getLength(data)
+
+  return {
+    reduce: function (step, acc) {
+      let idx = 0
+
+      while (idx < length) {
+        const row = {}
+
+        for (const columnName in data) {
+          row[columnName] = data[columnName][idx]
+        }
+
+        acc = step(acc, row)
+
+        if (acc && acc['@@transducer/reduced']) {
+          acc = acc['@@transducer/value']
+          break
+        }
+
+        idx += 1
+      }
+
+      return acc
+    }
+  }
 }
 
-function getDataLength (data) {
+export function accumulator () {
+  return new ColumnOrientedAccumulator()
+}
+
+function _getLength (data) {
   return data[Object.keys(data)[0]].length
 }
 
-function getColumnNames (data) {
-  return Object.keys(data)
+function ColumnOrientedAccumulator () {
+  this['@@transducer/step'] = this._initStep
 }
 
-function getRow (data, index) {
-  const row = {}
+ColumnOrientedAccumulator.prototype['@@transducer/init'] = () => ({})
+ColumnOrientedAccumulator.prototype['@@transducer/result'] = identity
+ColumnOrientedAccumulator.prototype._initStep = _initStep
+ColumnOrientedAccumulator.prototype._step = _step
 
-  for (const columnName in data) {
-    row[columnName] = data[columnName][index]
-  }
-
-  return row
-}
-
-function initData (columns) {
-  const newData = {}
-
-  for (const columnName of columns) {
-    newData[columnName] = []
-  }
-
-  return newData
-}
-
-function addRow (data, row) {
+function _initStep (acc, row) {
   for (const columnName in row) {
-    data[columnName].push(row[columnName])
+    acc[columnName] = [row[columnName]]
   }
+
+  this['@@transducer/step'] = this._step
+
+  return acc
 }
 
-function sortIntoOrder (data, indexArray) {
-  const newData = {}
-
-  for (const columnName in data) {
-    newData[columnName] = indexArray.map(index => data[columnName][index])
+function _step (acc, row) {
+  for (const columnName in row) {
+    acc[columnName].push(row[columnName])
   }
 
-  return newData
+  return acc
 }
