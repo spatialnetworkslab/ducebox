@@ -1,7 +1,11 @@
 {
+  "name": "@snlab/ducebox",
+  "version": "0.0.1",
   "main": "dist/ducebox.cjs.js",
   "module": "dist/ducebox.esm.js",
   "browser": "dist/ducebox.umd.js",
+  "repository": "https://github.com/spatialnetworkslab/ducebox.git",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
