@@ -56,7 +56,7 @@ ColumnOrientedAccumulator.prototype._step = _step
 
 function _initStep (acc, row) {
   for (const columnName in row) {
-    acc[columnName] = []
+    acc[columnName] = [row[columnName]]
   }
 
   return acc
