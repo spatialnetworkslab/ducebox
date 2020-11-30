@@ -26,7 +26,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
-    "perf": "npm run build && node ./perf/perf.js --"
+    "perf": "npm run build && node ./perf/perf.js --",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist"
