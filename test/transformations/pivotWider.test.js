@@ -1,4 +1,5 @@
-import { pivotWider, compose, filter, mutate, into } from '../../src/index.js'
+import { pivotWider, compose, filter, mutate, into, columnOriented } from '../../src/index.js'
+import { test } from 'ramda'
 
 describe('pivotWider: standalone', () => {
   it('works (values complete)', () => {

@@ -33,11 +33,19 @@ function XPivotWider ({ namesFrom, valuesFrom, valuesFill = null }, xf) {
   this.newColumnsSet = new Set()
   this.newColumns = null
 
-  this['@@transducer/step'] = this._initStep
+  this.init = true
 }
 
 XPivotWider.prototype['@@transducer/init'] = _xfBase.init
 XPivotWider.prototype['@@transducer/result'] = _result
+XPivotWider.prototype['@@transducer/step'] = function (acc, row) {
+  if (this.init) {
+    this._initStep(acc, row)
+    this.init = false
+  }
+
+  return this._step(acc, row)
+}
 XPivotWider.prototype._initStep = _initStep
 XPivotWider.prototype._step = _step
 XPivotWider.prototype._finalStep = _finalStep
@@ -56,9 +64,6 @@ function _initStep (acc, row) {
   const columns = Object.keys(row)
   const nonIdColumns = [this.namesFrom, this.valuesFrom]
   this.idColumns = columns.filter(c => !nonIdColumns.includes(c))
-
-  this['@@transducer/step'] = this._step
-  return this['@@transducer/step'](acc, row)
 }
 
 function _step (acc, row) {

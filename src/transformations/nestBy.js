@@ -42,11 +42,19 @@ function XNestBy (nestInstructions, by, xf) {
   this.nestedDataById = {}
   this.accumulatorById = {}
 
-  this['@@transducer/step'] = this._initStep
+  this.init = true
 }
 
 XNestBy.prototype['@@transducer/init'] = _xfBase.init
 XNestBy.prototype['@@transducer/result'] = _result
+XNestBy.prototype['@@transducer/step'] = function (acc, row) {
+  if (this.init) {
+    this._initStep(acc, row)
+    this.init = false
+  }
+
+  return this._step(acc, row)
+}
 XNestBy.prototype._initStep = _initStep
 XNestBy.prototype._step = _step
 
@@ -69,9 +77,6 @@ export function _initStep (acc, row) {
   }
 
   this.select = _getSelectFn(nestedColumns)
-
-  this['@@transducer/step'] = this._step
-  return this['@@transducer/step'](acc, row)
 }
 
 export function _step (acc, row) {

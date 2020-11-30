@@ -31,11 +31,19 @@ function XPivotLonger ({ columns, namesTo, valuesTo }, xf) {
   this.columns = null
   this.idColumns = null
 
-  this['@@transducer/step'] = this._initStep
+  this.init = true
 }
 
 XPivotLonger.prototype['@@transducer/init'] = _xfBase.init
 XPivotLonger.prototype['@@transducer/result'] = _xfBase.result
+XPivotLonger.prototype['@@transducer/step'] = function (acc, row) {
+  if (this.init) {
+    this._initStep(acc, row)
+    this.init = false
+  }
+
+  return this._step(acc, row)
+}
 XPivotLonger.prototype._initStep = _initStep
 XPivotLonger.prototype._step = _step
 
@@ -45,9 +53,6 @@ function _initStep (acc, row) {
   this.idColumns = this.columns.filter(
     columnName => !this.pivotColumnsSet.has(columnName)
   )
-
-  this['@@transducer/step'] = this._step
-  return this['@@transducer/step'](acc, row)
 }
 
 function _step (acc, row) {

@@ -26,11 +26,19 @@ function XFilterByIrreducable (summariseFn, predicate, by, xf) {
   this.rows = []
   this.ids = []
 
-  this['@@transducer/step'] = this._initStep
+  this.init = true
 }
 
 XFilterByIrreducable.prototype['@@transducer/init'] = _xfBase.init
 XFilterByIrreducable.prototype['@@transducer/result'] = _result
+XFilterByIrreducable.prototype['@@transducer/step'] = function (acc, row) {
+  if (this.init) {
+    this._initStep(acc, row)
+    this.init = false
+  }
+
+  return this._step(acc, row)
+}
 XFilterByIrreducable.prototype._initStep = _initStep
 XFilterByIrreducable.prototype._step = _step
 
