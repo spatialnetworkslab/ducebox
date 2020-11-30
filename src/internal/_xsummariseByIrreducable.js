@@ -21,11 +21,19 @@ function XSummariseByIrreducable (summariseFn, by, xf) {
   this.nestedDataById = {}
   this.accumulatorById = {}
 
-  this['@@transducer/step'] = this._initStep
+  this.init = true
 }
 
 XSummariseByIrreducable.prototype['@@transducer/init'] = _xfBase.init
 XSummariseByIrreducable.prototype['@@transducer/result'] = _result
+XSummariseByIrreducable.prototype['@@transducer/step'] = function (acc, row) {
+  if (this.init) {
+    this._initStep(acc, row)
+    this.init = false
+  }
+
+  return this._step(acc, row)
+}
 XSummariseByIrreducable.prototype._initStep = _initStep
 XSummariseByIrreducable.prototype._step = _step
 XSummariseByIrreducable.prototype._finalStep = _finalStep

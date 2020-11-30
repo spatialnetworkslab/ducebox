@@ -38,11 +38,19 @@ function _getLength (data) {
 }
 
 function ColumnOrientedAccumulator () {
-  this['@@transducer/step'] = this._initStep
+  this.init = true
 }
 
 ColumnOrientedAccumulator.prototype['@@transducer/init'] = () => ({})
 ColumnOrientedAccumulator.prototype['@@transducer/result'] = identity
+ColumnOrientedAccumulator.prototype['@@transducer/step'] = function (acc, row) {
+  if (this.init) {
+    this.init = false
+    return this._initStep(acc, row)
+  }
+
+  return this._step(acc, row)
+}
 ColumnOrientedAccumulator.prototype._initStep = _initStep
 ColumnOrientedAccumulator.prototype._step = _step
 
@@ -50,8 +58,6 @@ function _initStep (acc, row) {
   for (const columnName in row) {
     acc[columnName] = [row[columnName]]
   }
-
-  this['@@transducer/step'] = this._step
 
   return acc
 }

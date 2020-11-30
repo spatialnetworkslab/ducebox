@@ -27,11 +27,19 @@ function XUnnest (nestColName, nestWrapper, xf) {
   this.xf = xf
   this.outerColumns = []
 
-  this['@@transducer/step'] = this._initStep
+  this.init = true
 }
 
 XUnnest.prototype['@@transducer/init'] = _xfBase.init
 XUnnest.prototype['@@transducer/result'] = _xfBase.result
+XUnnest.prototype['@@transducer/step'] = function (acc, row) {
+  if (this.init) {
+    this._initStep(acc, row)
+    this.init = false
+  }
+
+  return this._step(acc, row)
+}
 
 XUnnest.prototype._initStep = function (acc, row) {
   for (const columnName in row) {
@@ -39,9 +47,6 @@ XUnnest.prototype._initStep = function (acc, row) {
       this.outerColumns.push(columnName)
     }
   }
-
-  this['@@transducer/step'] = this._step
-  return this['@@transducer/step'](acc, row)
 }
 
 XUnnest.prototype._step = function (acc, row) {

@@ -1,4 +1,4 @@
-import { pivotLonger, compose, mutate, filter, into } from '../../src/index.js'
+import { pivotLonger, compose, mutate, filter, into, columnOriented } from '../../src/index.js'
 
 const input = [
   { col1: 1, col2: 10, col3: 'a', col4: 'aa', col5: 'aaa' },
@@ -32,7 +32,7 @@ describe('pivotLonger: standalone', () => {
   })
 })
 
-describe('piotLonger: transformer', () => {
+describe('pivotLonger: transformer', () => {
   it('mutate + pivotLonger + filter', () => {
     const xf = compose(
       mutate({ col2: ({ col1, col2 }) => col2 - col1 }),
@@ -50,6 +50,33 @@ describe('piotLonger: transformer', () => {
       { col1: 3, col2: 27, name: 'col4', value: 'cc' },
       { col1: 3, col2: 27, name: 'col5', value: 'ccc' }
     ]
+
+    expect(output).toEqual(expectedOutput)
+  })
+})
+
+describe('pivotLonger: bug', () => {
+  test('bug in DataContainer: lengths becomes weird w/ column oriented data', () => {
+    const input = {
+      col1: [1, 2, 3],
+      col2: [10, 20, 30],
+      col3: ['a', 'b', 'c'],
+      col4: ['aa', 'bb', 'cc'],
+      col5: ['aaa', 'bbb', 'ccc']
+    }
+
+    const output = into(
+      columnOriented.accumulator(),
+      pivotLonger(pivotInstructions),
+      columnOriented.wrap(input)
+    )
+
+    const expectedOutput = {
+      col1: [1, 1, 1, 2, 2, 2, 3, 3, 3],
+      col2: [10, 10, 10, 20, 20, 20, 30, 30, 30],
+      name: ['col3', 'col4', 'col5', 'col3', 'col4', 'col5', 'col3', 'col4', 'col5'],
+      value: ['a', 'aa', 'aaa', 'b', 'bb', 'bbb', 'c', 'cc', 'ccc']
+    }
 
     expect(output).toEqual(expectedOutput)
   })
