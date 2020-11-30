@@ -72,8 +72,6 @@ function _step (acc, row) {
       newRow[idColumnName] = row[idColumnName]
     }
 
-    console.log(newRow)
-
     newRows.push(newRow)
   }
 
